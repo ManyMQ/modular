@@ -12,7 +12,7 @@ Modular's theme system provides a powerful way to customize the appearance of yo
 
 <div align="center">
 
-![Dark Theme](assets/@modulardark_transparent.png)
+![Dark Theme](assets/modulardark_transparent.png)
 
 *Dark theme preview*
 
@@ -55,7 +55,7 @@ Modular includes several professionally designed built-in themes:
 
 <div align="center">
 
-![Light Theme](assets/@modularlight_transparent.png)
+![Light Theme](assets/modularlight_transparent.png)
 
 *Light theme - Clean and minimal*
 

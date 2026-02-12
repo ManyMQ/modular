@@ -1,10 +1,10 @@
-# <div align="center"><img src="docs/assets/@modularlight_transparent.png" alt="Modular" width="400"/></div>
+# <div align="center"><img src="docs/assets/modularlight_transparent.png" alt="Modular" width="400"/></div>
 
 <div align="center">
 
 **A powerful, flexible, and themeable card generation library for Discord bots**
 
-[![Discord Server](https://img.shields.io/discord/1234567890?style=flat-square&logo=discord&label=Discord)](https://discord.gg/example)
+[![Discord Server](https://img.shields.io/discord/1234567890?style=flat-square&logo=discord&label=Discord)](https://discord.gg/dxFKm7nhCN)
 [![npm version](https://img.shields.io/npm/v/@modulardark/example?style=flat-square&logo=npm)](https://npmjs.com/package/modular)
 [![npm downloads](https://img.shields.io/npm/dw/modular?style=flat-square&logo=npm)](https://npmjs.com/package/modular)
 [![License](https://img.shields.io/github/license/example/modular?style=flat-square)](LICENSE)

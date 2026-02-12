@@ -12,7 +12,7 @@ Invite cards display server invite statistics and track member invites. They sho
 
 <div align="center">
 
-![Invite Preview](assets/@modularlight_transparent.png)
+![Invite Preview](assets/modularlight_transparent.png)
 
 *Track your server growth*
 

@@ -12,7 +12,7 @@ Rank cards display user level, XP, and rank information with progress visualizat
 
 <div align="center">
 
-![Rank Card Preview](assets/@modularlight_transparent.png)
+![Rank Card Preview](assets/modularlight_transparent.png)
 
 *Beautiful rank cards*
 

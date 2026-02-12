@@ -12,7 +12,7 @@ Leaderboard cards display server rankings and leaderboards. They can show the to
 
 <div align="center">
 
-![Leaderboard Preview](assets/@modulardark_transparent.png)
+![Leaderboard Preview](assets/modulardark_transparent.png)
 
 *Beautiful server leaderboards*
 
