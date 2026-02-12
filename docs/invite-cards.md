@@ -1,12 +1,12 @@
 # Invite Cards
 
-Invite cards display user invite statistics and tracking information. Perfect for servers that track member referrals and invitations.
+Invite cards display server invite statistics and track member invites. They show who invited the most members and track invite trends over time.
 
 <div align="center">
 
-![Invite Card Preview](assets/@modulardark_transparent.png)
+![Invite Preview](assets/@modularlight_transparent.png)
 
-*Track server invites beautifully*
+*Track your server growth*
 
 </div>
 
@@ -14,7 +14,7 @@ Invite cards display user invite statistics and tracking information. Perfect fo
 
 - [Overview](#overview)
 - [Basic Usage](#basic-usage)
-- [Invites Configuration](#invites-configuration)
+- [Invite Data Structure](#invite-data-structure)
 - [Customization](#customization)
 - [Examples](#examples)
 - [Styling Options](#styling-options)
@@ -23,12 +23,13 @@ Invite cards display user invite statistics and tracking information. Perfect fo
 
 ## Overview
 
-Invite cards display invitation statistics, commonly used for:
+Invite cards are perfect for tracking and displaying:
 
-- Invite tracking and rewards
-- Referral programs
-- Member count statistics
-- Vanity URL tracking
+- Top inviters in your server
+- Invite counts per user
+- Invite trends over time
+- Real-time invite leaderboards
+- Banners for invite tracking channels
 
 ---
 
@@ -42,227 +43,280 @@ const { createEngine } = require('modular');
 const engine = createEngine();
 
 const inviteCard = engine.createInviteCard()
-  .setUser(user)
-  .setInvites({
-    total: 50,
-    regular: 30,
-    fake: 5,
-    leaves: 10,
-    bonus: 5
-  });
+  .setGuild(guild)
+  .setInvites([
+    { rank: 1, inviter: user1, total: 150, regular: 140, fake: 5, leave: 5 },
+    { rank: 2, inviter: user2, total: 125, regular: 120, fake: 3, leave: 2 },
+    { rank: 3, inviter: user3, total: 100, regular: 95, fake: 3, leave: 2 }
+  ]);
 
 await inviteCard.send(interaction);
 ```
 
-### With Discord User
+### Server-wide Invite Stats
 
 ```javascript
 const inviteCard = engine.createInviteCard()
-  .setUser(interaction.user)
-  .setInvites({
-    total: 25,
-    regular: 20,
-    fake: 2,
-    leaves: 3,
-    bonus: 0
-  });
+  .setGuild(interaction.guild)
+  .setInvites(allInvites)
+  .setTheme('dark');
 
 await inviteCard.send(interaction);
 ```
 
 ---
 
-## Invites Configuration
+## Invite Data Structure
 
-### Basic Invite Stats
+### Basic Invite Data
 
 ```typescript
-interface InviteStats {
-  total: number;      // Total invites
-  regular: number;    // Regular invites
-  fake: number;       // Fake invites
-  leaves: number;     // Left invites
-  bonus: number;      // Bonus invites
+interface InviteData {
+  rank: number;            // Position (1, 2, 3, etc.)
+  inviter: Discord.User;   // User object
+  total: number;           // Total invites
+  regular?: number;        // Regular invites
+  fake?: number;           // Fake invites (bonus)
+  leave?: number;          // Members who left
 }
 ```
 
-### Extended Invite Stats
+### Extended Invite Data
 
 ```typescript
-interface ExtendedInviteStats {
+interface ExtendedInviteData {
+  rank: number;
+  inviter: Discord.User;
   total: number;
   regular: number;
   fake: number;
-  leaves: number;
-  bonus: number;
-  inviter?: Discord.User;  // Who invited this user
-  invitedUsers?: Discord.User[];  // Users this person invited
-  vanityCode?: string;     // Vanity URL code
-  uses?: number;           // Vanity URL uses
+  leave: number;
+  bonus?: number;          // Bonus points
+  inviterName?: string;    // Custom name display
+  custom?: Record<string, any>;
 }
 ```
 
-### Example with Extended Info
+### Example with Extended Data
 
 ```javascript
 const inviteCard = engine.createInviteCard()
-  .setUser(user)
-  .setInvites({
-    total: 50,
-    regular: 30,
-    fake: 5,
-    leaves: 10,
-    bonus: 5
-  })
-  .setInviter(inviterUser);
+  .setGuild(guild)
+  .setInvites([
+    {
+      rank: 1,
+      inviter: user1,
+      total: 150,
+      regular: 140,
+      fake: 5,
+      leave: 5,
+      bonus: 10,
+      inviterName: 'TopInviter'
+    },
+    {
+      rank: 2,
+      inviter: user2,
+      total: 125,
+      regular: 120,
+      fake: 3,
+      leave: 2,
+      bonus: 5
+    }
+  ]);
 ```
 
 ---
 
 ## Customization
 
-### Show Inviter
+### Highlight Specific Inviter
 
 ```javascript
-// Show who invited this user
-inviteCard.setInviter(inviterUser);
+// Highlight current user's invites
+inviteCard.setHighlightUser(interaction.user.id);
+
+// Highlight top 3
+inviteCard.setHighlightUsers([user1.id, user2.id, user3.id]);
 ```
 
-### Vanity URL Stats
+### Show/Hide Avatars
 
 ```javascript
-// Add vanity URL information
-inviteCard.setVanity({
-  code: 'discord',
-  uses: 1250
-});
+// Show inviter avatars
+inviteCard.setShowAvatars(true);
+
+// Hide inviter avatars
+inviteCard.setShowAvatars(false);
 ```
 
-### Breakdown Display
+### Set Max Entries
 
 ```javascript
-// Show detailed breakdown
-inviteCard.setShowBreakdown(true);
-inviteCard.setBreakdownColumns([
-  { field: 'regular', label: 'Regular' },
-  { field: 'fake', label: 'Fake' },
-  { field: 'leaves', label: 'Left' },
-  { field: 'bonus', label: 'Bonus' }
+// Show only top 5
+inviteCard.setMaxEntries(5);
+
+// Show top 10
+inviteCard.setMaxEntries(10);
+```
+
+### Customize Columns
+
+```javascript
+inviteCard.setColumns([
+  { field: 'rank', label: '#', width: 40 },
+  { field: 'inviter', label: 'Inviter', width: 180 },
+  { field: 'total', label: 'Total', width: 80 },
+  { field: 'regular', label: 'Regular', width: 80 },
+  { field: 'leave', label: 'Left', width: 60 }
 ]);
+```
+
+### Time Period Filtering
+
+```javascript
+// Weekly invites only
+inviteCard.setTimePeriod('weekly');
+
+// Monthly invites only
+inviteCard.setTimePeriod('monthly');
+
+// All time
+inviteCard.setTimePeriod('alltime');
 ```
 
 ---
 
 ## Examples
 
-### Basic Invite Card
+### Basic Invite Leaderboard
 
 ```javascript
 const inviteCard = engine.createInviteCard()
-  .setUser(interaction.user)
-  .setInvites({
-    total: 50,
-    regular: 30,
-    fake: 5,
-    leaves: 10,
-    bonus: 5
-  })
-  .setTheme('dark');
+  .setGuild(interaction.guild)
+  .setInvites(
+    users
+      .sort((a, b) => b.invites - a.invites)
+      .slice(0, 10)
+      .map((user, index) => ({
+        rank: index + 1,
+        inviter: user.discordUser,
+        total: user.invites,
+        regular: user.regularInvites,
+        fake: user.fakeInvites,
+        leave: user.leaveCount
+      }))
+  )
+  .setTheme('neon');
 
 await inviteCard.send(interaction);
 ```
 
-### Full Featured Invite Card
+### Weekly Invite Competition
 
 ```javascript
-const inviteCard = engine.createInviteCard()
-  .setUser(interaction.user)
-  .setInvites({
-    total: 75,
-    regular: 55,
-    fake: 3,
-    leaves: 12,
-    bonus: 5
-  })
-  .setTheme('cyberpunk')
-  .setShowBreakdown(true)
-  .setBackground({
-    type: 'gradient',
-    colors: ['#1a1a2e', '#16213e'],
-    direction: 'horizontal'
-  })
-  .setTokens({
-    'text.fontFamily': 'Montserrat',
-    'card.shadow': '0 4px 20px rgba(0, 255, 204, 0.3)'
-  });
+async function createWeeklyInvites(guild) {
+  const weeklyInvites = await getWeeklyInvites(guild.id);
 
-await inviteCard.send(interaction);
-```
+  const entries = weeklyInvites
+    .sort((a, b) => b.weeklyInvites - a.weeklyInvites)
+    .slice(0, 10)
+    .map((data, index) => ({
+      rank: index + 1,
+      inviter: data.user,
+      total: data.weeklyInvites,
+      regular: data.weeklyRegular,
+      fake: data.weeklyFake,
+      leave: data.weeklyLeft
+    }));
 
-### Invite Leaderboard Card
-
-```javascript
-async function createInviteLeaderboard(guild) {
-  const invites = await getServerInvites(guild.id);
-
-  const sortedInvites = invites
-    .sort((a, b) => b.total - a.total)
-    .slice(0, 10);
-
-  // Create individual cards for each user
-  const cards = await Promise.all(
-    sortedInvites.slice(0, 3).map(async (inviteData, index) => {
-      const card = engine.createInviteCard()
-        .setUser(inviteData.user)
-        .setInvites({
-          total: inviteData.total,
-          regular: inviteData.regular,
-          fake: inviteData.fake,
-          leaves: inviteData.leaves,
-          bonus: inviteData.bonus
-        })
-        .setTheme(index === 0 ? 'gold' : 'cyberpunk');
-
-      return { index: index + 1, buffer: await card.toBuffer() };
-    })
-  );
-
-  return cards;
+  return engine.createInviteCard()
+    .setGuild(guild)
+    .setEntries(entries)
+    .setTheme('cyberpunk')
+    .setTimePeriod('weekly')
+    .setColumns([
+      { field: 'rank', label: '#', width: 40 },
+      { field: 'inviter', label: 'Inviter', width: 150 },
+      { field: 'total', label: 'Weekly', width: 80 },
+      { field: 'regular', label: 'Reg', width: 50 },
+      { field: 'leave', label: 'Left', width: 50 }
+    ]);
 }
 
-// Usage
-const topInviters = await createInviteLeaderboard(interaction.guild);
+const card = await createWeeklyInvites(interaction.guild);
+await card.send(interaction);
 ```
 
-### Vanity Stats Card
+### Invite Stats with Bonus
 
 ```javascript
 const inviteCard = engine.createInviteCard()
-  .setUser(interaction.user)
-  .setVanity({
-    code: 'discord',
-    uses: interaction.guild.vanityURLUses
-  })
-  .setTheme('midnight');
+  .setGuild(interaction.guild)
+  .setEntries(inviteData.map((data, index) => ({
+    rank: index + 1,
+    inviter: data.user,
+    total: data.total,
+    regular: data.regular,
+    fake: data.fake,
+    leave: data.left,
+    bonus: data.bonus
+  })))
+  .setTheme('dark')
+  .setColumns([
+    { field: 'rank', label: '#', width: 40 },
+    { field: 'inviter', label: 'Inviter', width: 180 },
+    { field: 'total', label: 'Total', width: 80 },
+    { field: 'bonus', label: 'Bonus', width: 70 }
+  ])
+  .setHighlightUser(interaction.user.id);
 
 await inviteCard.send(interaction);
+```
+
+### Invite Tracking Channel Banner
+
+```javascript
+// Create a banner-style invite card
+const bannerCard = engine.createInviteCard()
+  .setGuild(guild)
+  .setEntries(topInviters.slice(0, 5))
+  .setTheme('banner')
+  .setStyle('banner')
+  .setBackground({
+    type: 'image',
+    url: 'https://example.com/banner-bg.jpg'
+  });
+
+// Send to invite tracking channel
+await bannerCard.send(inviteChannel);
 ```
 
 ---
 
 ## Styling Options
 
-### Progress Bar Styles
+### Column Styles
 
 ```javascript
 card.setTokens({
-  'progress.height': 10,
-  'progress.borderRadius': 5,
-  'progress.regular.fill': '#10b981',
-  'progress.fake.fill': '#ef4444',
-  'progress.leaves.fill': '#f59e0b',
-  'progress.bonus.fill': '#8b5cf6',
-  'progress.background': 'rgba(255, 255, 255, 0.1)'
+  'column.header.background': '#1a1a2e',
+  'column.header.text': '#00ffcc',
+  'column.cell.background': 'transparent',
+  'column.cell.text': '#ffffff',
+  'column.alternate.background': 'rgba(255, 255, 255, 0.05)'
+});
+```
+
+### Rank Badge Styles
+
+```javascript
+card.setTokens({
+  'rank.size': 32,
+  'rank.background': '#1a1a2e',
+  'rank.gold.background': '#ffd700',
+  'rank.silver.background': '#c0c0c0',
+  'rank.bronze.background': '#cd7f32',
+  'rank.text': '#ffffff'
 });
 ```
 
@@ -270,9 +324,9 @@ card.setTokens({
 
 ```javascript
 card.setTokens({
-  'avatar.size': 80,
+  'avatar.size': 40,
   'avatar.border': '#00ffcc',
-  'avatar.borderWidth': 4,
+  'avatar.borderWidth': 2,
   'avatar.shape': 'circle'
 });
 ```
@@ -281,27 +335,25 @@ card.setTokens({
 
 ```javascript
 card.setTokens({
-  'text.fontFamily': 'Montserrat',
-  'text.total.size': 32,
-  'text.total.weight': 700,
-  'text.label.size': 14,
-  'text.label.weight': 500,
+  'text.fontFamily': 'Inter',
+  'text.rank.size': 14,
+  'text.rank.weight': 700,
+  'text.user.size': 14,
+  'text.user.weight': 500,
+  'text.count.size': 12,
+  'text.count.weight': 400,
   'text.primary': '#ffffff',
-  'text.secondary': '#b3b3b3',
-  'text.accent': '#00ffcc'
+  'text.secondary': '#b3b3b3'
 });
 ```
 
-### Card Layout
+### Special Columns
 
 ```javascript
 card.setTokens({
-  'card.width': 600,
-  'card.height': 200,
-  'card.background': '#1a1a2e',
-  'card.borderRadius': 16,
-  'card.padding': 24,
-  'card.shadow': '0 4px 6px rgba(0, 0, 0, 0.3)'
+  'bonus.column.background': 'rgba(255, 215, 0, 0.1)',
+  'bonus.column.text': '#ffd700',
+  'bonus.column.border': '#ffd700'
 });
 ```
 
@@ -318,6 +370,6 @@ card.setTokens({
 
 ![Terms](assets/@modularterms.png)
 
-*Track invites with style*
+*See who's growing your community*
 
 </div>
