@@ -1,12 +1,12 @@
-# <div align="center"><img src="docs/assets/modularlight_banner_transparent.png" alt="Modular" width="400"/></div>
+# <div align="center"><img src="docs/assets/modularlight_transparent.png" alt="Modular" width="400"/></div>
 
 <div align="center">
 
 **A powerful, flexible, and themeable card generation library for Discord bots**
 
-[![Discord Server](https://img.shields.io/discord/1234567890?style=flat-square&logo=discord&label=Discord)](https://discord.gg/dxFKm7nhCN)
-[![npm version](https://img.shields.io/npm/v/@modulardark/example?style=flat-square&logo=npm)](https://npmjs.com/package/modular)
-[![npm downloads](https://img.shields.io/npm/dw/modular?style=flat-square&logo=npm)](https://npmjs.com/package/modular)
+[![Discord Server](https://img.shields.io/discord/1234567890?style=flat-square&logo=discord&label=Discord)](https://discord.gg/example)
+[![npm version](https://img.shields.io/npm/v/@modular.dev/modular?style=flat-square&logo=npm)](https://npmjs.com/package/@modular.dev/modular)
+[![npm downloads](https://img.shields.io/npm/dw/@modular.dev/modular?style=flat-square&logo=npm)](https://npmjs.com/package/@modular.dev/modular)
 [![License](https://img.shields.io/github/license/example/modular?style=flat-square)](LICENSE)
 [![Stars](https://img.shields.io/github/stars/example/modular?style=flat-square)](https://github.com/example/modular/stargazers)
 
@@ -47,19 +47,19 @@
 
 ```bash
 # npm
-npm install modular
+npm install @modular.dev/modular
 
 # yarn
-yarn add modular
+yarn add @modular.dev/modular
 
 # pnpm
-pnpm add modular
+pnpm add @modular.dev/modular
 ```
 
 ### Basic Usage
 
 ```javascript
-const { createEngine } = require('modular');
+const { createEngine } = require('@modular.dev/modular');
 const engine = createEngine();
 
 // Create a profile card
@@ -74,7 +74,7 @@ await card.send(interaction);
 ### From Setup to Send
 
 ```javascript
-const { createEngine } = require('modular');
+const { createEngine } = require('@modular.dev/modular');
 const engine = createEngine({
   defaultTheme: 'neon',
   cache: {

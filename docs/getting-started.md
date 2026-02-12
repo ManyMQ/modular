@@ -4,9 +4,9 @@
 
 **A production-grade Node.js canvas rendering engine for Discord cards**
 
-[![Node.js](https://img.shields.io/node/v/modular?style=flat-square&logo=node.js)](https://nodejs.org)
-[![Discord.js](https://img.shields.io/npm/dependency-version/modular/discord.js?style=flat-square&logo=discord)](https://discord.js.org)
-[![License](https://img.shields.io/npm/l/modular?style=flat-square)](LICENSE)
+[![Node.js](https://img.shields.io/node-v/@modular.dev/modular?style=flat-square&logo=node.js)](https://nodejs.org)
+[![Discord.js](https://img.shields.io/npm/dependency-version/@modular.dev/modular/discord.js?style=flat-square&logo=discord)](https://discord.js.org)
+[![License](https://img.shields.io/npm/l/@modular.dev/modular?style=flat-square)](LICENSE)
 
 </div>
 
@@ -40,26 +40,26 @@ Welcome to Modular! This guide will help you get started with our production-gra
 ### Using npm
 
 ```bash
-npm install modular
+npm install @modular.dev/modular
 ```
 
 ### Using yarn
 
 ```bash
-yarn add modular
+yarn add @modular.dev/modular
 ```
 
 ### Using pnpm
 
 ```bash
-pnpm add modular
+pnpm add @modular.dev/modular
 ```
 
 ### Verifying Installation
 
 ```javascript
-const { createEngine } = require('modular');
-console.log('Modular version:', require('modular/package.json').version);
+const { createEngine } = require('@modular.dev/modular');
+console.log('Modular version:', require('@modular.dev/modular/package.json').version);
 ```
 
 <div align="center">
@@ -112,7 +112,7 @@ Let's create your first card step by step.
 ### Step 1: Initialize the Engine
 
 ```javascript
-const { createEngine } = require('modular');
+const { createEngine } = require('@modular.dev/modular');
 
 // Create an engine instance with default options
 const engine = createEngine();
@@ -128,7 +128,7 @@ const engine = createEngine({
 ### Step 2: Create a Card
 
 ```javascript
-const { createEngine } = require('modular');
+const { createEngine } = require('@modular.dev/modular');
 
 const engine = createEngine();
 
@@ -289,7 +289,7 @@ await welcomeCard.send(interaction);
 
 <div align="center">
 
-![Themes](assets/modularlight_transparent.png)
+![Themes](docs/assets/modularlight_transparent.png)
 
 *Multiple theme options available*
 
@@ -489,7 +489,7 @@ card.tokens.set('avatar.border', '#ff00ff');
 
 ```javascript
 const { Client, GatewayIntentBits, SlashCommandBuilder } = require('discord.js');
-const { createEngine } = require('modular');
+const { createEngine } = require('@modular.dev/modular');
 
 const client = new Client({
   intents: [
@@ -604,7 +604,7 @@ const card = engine.createRankCard()
     height: 250,        // Card height
     format: 'png',      // Output format (png, jpeg)
     quality: 1.0,       // Image quality (0-1)
-    background: null,  // Background override
+    background: null,   // Background override
     cache: true         // Enable caching
   });
 ```

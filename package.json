@@ -1,5 +1,5 @@
 {
-  "name": "modular",
+  "name": "@modular.dev/modular",
   "version": "2.0.0",
   "description": "Production-grade Node.js canvas rendering engine for Discord cards",
   "main": "index.js",
