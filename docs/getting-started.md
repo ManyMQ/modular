@@ -103,7 +103,7 @@ Let's create your first card step by step.
 
 <div align="center">
 
-![First Card](assets/modulardark_transparent.png)
+![First Card](docs/assets/modulardark_transparent.png)
 
 *Create stunning rank cards*
 
