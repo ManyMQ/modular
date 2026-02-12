@@ -1,5 +1,13 @@
 # Music Cards
 
+<div align="center">
+
+**Display current playing track information**
+
+[![Music Cards](https://img.shields.io/npm/dw/modular?style=flat-square&logo=music)](music-cards.md)
+
+</div>
+
 Music cards display current playing track information with progress visualization. Perfect for music bots and servers with music features.
 
 <div align="center">
@@ -90,7 +98,7 @@ interface TrackInfo {
   album?: string;     // Album name (optional)
   coverUrl?: string;  // Album cover URL (optional)
   duration: number;   // Duration in seconds
-  position: number;  // Current position in seconds
+  position: number;   // Current position in seconds
 }
 ```
 

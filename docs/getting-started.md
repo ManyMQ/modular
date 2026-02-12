@@ -1,5 +1,15 @@
 # Getting Started with Modular
 
+<div align="center">
+
+**A production-grade Node.js canvas rendering engine for Discord cards**
+
+[![Node.js](https://img.shields.io/node/v/modular?style=flat-square&logo=node.js)](https://nodejs.org)
+[![Discord.js](https://img.shields.io/npm/dependency-version/modular/discord.js?style=flat-square&logo=discord)](https://discord.js.org)
+[![License](https://img.shields.io/npm/l/modular?style=flat-square)](LICENSE)
+
+</div>
+
 Welcome to Modular! This guide will help you get started with our production-grade Node.js canvas rendering engine for Discord cards.
 
 <div align="center">
@@ -504,39 +514,16 @@ client.on('interactionCreate', async (interaction) => {
   if (!interaction.isChatInputCommand()) return;
 
   if (interaction.commandName === 'rank') {
-    const rankCard = engine.createRankCard()
+    const card = engine.createRankCard()
       .setUser(interaction.user)
-      .setStats({
-        level: 50,
-        xp: 7500,
-        maxXp: 10000,
-        rank: 5
-      })
+      .setStats({ level: 50, xp: 7500, maxXp: 10000, rank: 5 })
       .setTheme('cyberpunk');
 
-    await rankCard.send(interaction);
+    await card.send(interaction);
   }
 });
 
 client.login('YOUR_BOT_TOKEN');
-```
-
-### Using with Interactions
-
-```javascript
-// Slash command
-await interaction.deferReply();
-const card = engine.createRankCard()
-  .setUser(interaction.user)
-  .setStats({ /* stats */ });
-await card.send(interaction);
-
-// Context menu
-await interaction.deferReply({ ephemeral: true });
-const card = engine.createProfileCard()
-  .setUser(targetUser)
-  .setTheme('dark');
-await card.reply(interaction);
 ```
 
 ---
@@ -558,27 +545,20 @@ await card.reply(interaction);
 ### Follow-up Message
 
 ```javascript
+// Regular follow-up
 await card.followUp(interaction);
-```
 
-### Ephemeral Message
-
-```javascript
+// Ephemeral message (only visible to user)
 await card.followUp(interaction, { ephemeral: true });
 ```
 
-### Get as Buffer/Stream
+### With Custom Content
 
 ```javascript
-// Get as Buffer (PNG)
-const buffer = await card.toBuffer();
-
-// Get as Stream
-const stream = await card.toStream();
-
-// Save to file
-const fs = require('fs');
-fs.writeFileSync('card.png', buffer);
+await card.send(interaction, {
+  content: 'Check out your new rank card!',
+  ephemeral: true
+});
 ```
 
 ---
@@ -589,13 +569,13 @@ fs.writeFileSync('card.png', buffer);
 
 ```javascript
 const engine = createEngine({
-  // Render DPI (higher = better quality, more memory)
+  // Render quality (higher = better quality, more memory)
   dpi: 2,
 
   // Cache configuration
   cache: {
-    maxSize: 100,        // Maximum cached items
-    maxAge: 3600000      // Cache TTL in ms (1 hour)
+    maxSize: 100,       // Maximum cached items
+    maxAge: 3600000     // Cache TTL in ms (1 hour default)
   },
 
   // Enable debug logging
@@ -604,13 +584,13 @@ const engine = createEngine({
   // Enable canvas rendering
   canvas: true,
 
-  // Default theme
+  // Default theme name
   defaultTheme: 'dark',
 
   // Font configuration
   fonts: {
-    default: 'Inter',
-    path: './fonts'      // Custom font path
+    default: 'Inter',   // Default font family
+    path: './fonts'     // Custom font directory
   }
 });
 ```
@@ -620,10 +600,12 @@ const engine = createEngine({
 ```javascript
 const card = engine.createRankCard()
   .setOptions({
-    width: 800,
-    height: 250,
-    padding: 20,
-    dpi: 2
+    width: 800,         // Card width
+    height: 250,        // Card height
+    format: 'png',      // Output format (png, jpeg)
+    quality: 1.0,       // Image quality (0-1)
+    background: null,  // Background override
+    cache: true         // Enable caching
   });
 ```
 
@@ -631,32 +613,35 @@ const card = engine.createRankCard()
 
 ## ❓ Common Questions
 
-### How do I add custom fonts?
+### How do I change the card size?
 
 ```javascript
-engine.fonts.register({
-  name: 'Montserrat',
-  path: './fonts/Montserrat-Regular.ttf',
-  weights: {
-    400: './fonts/Montserrat-Regular.ttf',
-    600: './fonts/Montserrat-SemiBold.ttf',
-    700: './fonts/Montserrat-Bold.ttf'
-  }
+card.setTokens({
+  'card.width': 800,
+  'card.height': 250
 });
 ```
 
-### How do I handle image caching?
+### Can I use custom fonts?
 
 ```javascript
-// Preload images
-await engine.cache.preloadImage('avatar', 'https://example.com/avatar.jpg');
-await engine.cache.preloadImage('background', 'https://example.com/bg.jpg');
+engine.fonts.register({
+  family: 'Montserrat',
+  path: './fonts/Montserrat-Regular.ttf'
+});
 
-// Get cached image
-const image = engine.cache.getImage('avatar');
+card.setTokens({
+  'text.fontFamily': 'Montserrat'
+});
+```
 
-// Clear cache
-engine.cache.clear();
+### How do I add badges to cards?
+
+```javascript
+card.setBadges([
+  { type: 'online', position: 'top-right' },
+  { type: 'verified', position: 'top-left' }
+]);
 ```
 
 ### How do I create animated cards?
@@ -664,41 +649,31 @@ engine.cache.clear();
 ```javascript
 const card = engine.createRankCard()
   .setUser(user)
-  .setStats({ /* stats */ })
-  .setAnimation({
-    type: 'pulse',
-    duration: 1000,
-    easing: 'ease-in-out'
+  .setOptions({
+    animation: {
+      enabled: true,
+      duration: 1000,
+      type: 'fade-in'
+    }
   });
-```
-
-### How do I handle errors?
-
-```javascript
-try {
-  const card = engine.createRankCard()
-    .setUser(user)
-    .setStats({ /* stats */ });
-  await card.send(interaction);
-} catch (error) {
-  console.error('Card rendering failed:', error);
-  await interaction.followUp('Failed to generate card.');
-}
 ```
 
 ---
 
-## Next Steps
+## Related Documentation
 
-- 📖 Read the [API Reference](api-reference.md)
-- 🎨 Explore the [Theme System](themes.md)
-- 🔌 Learn about the [Plugin System](api-reference.md#plugin-system)
-- ⚡ Check out [Performance Tips](api-reference.md#performance-apis)
+- [API Reference](api-reference.md) - Complete API documentation
+- [Themes](themes.md) - Theme customization guide
+- [Output Guide](output-guide.md) - Export and deployment options
+- [Rank Cards](rank-cards.md) - Rank card specific documentation
+- [Music Cards](music-cards.md) - Music card specific documentation
+- [Leaderboard Cards](leaderboard-cards.md) - Leaderboard card documentation
+- [Invite Cards](invite-cards.md) - Invite card documentation
 
 <div align="center">
 
 ![Terms](assets/@modularterms.png)
 
-**Happy coding! 🎉**
+*Get started with Modular today*
 
 </div>

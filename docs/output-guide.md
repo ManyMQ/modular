@@ -1,5 +1,13 @@
 # Output Guide
 
+<div align="center">
+
+**Export your cards to Discord, files, or anywhere**
+
+[![Output](https://img.shields.io/npm/dw/modular?style=flat-square&logo=download)](output-guide.md)
+
+</div>
+
 This guide explains how to get output from Modular cards - whether sending to Discord, saving to files, or using in other contexts.
 
 <div align="center">
@@ -479,9 +487,10 @@ try {
 
 ## Related Documentation
 
-- [Getting Started](getting-started.md)
-- [API Reference](api-reference.md)
-- [Discord.js Integration](getting-started.md#discordjs-integration)
+- [Getting Started](getting-started.md) - Quick start guide
+- [API Reference](api-reference.md) - Complete API documentation
+- [Discord.js Integration](getting-started.md#discordjs-integration) - Discord setup
+- [Themes](themes.md) - Theme customization
 
 <div align="center">
 

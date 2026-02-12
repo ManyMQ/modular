@@ -1,5 +1,13 @@
 # Leaderboard Cards
 
+<div align="center">
+
+**Display server rankings and leaderboards**
+
+[![Leaderboard](https://img.shields.io/npm/dw/modular?style=flat-square&logo=list)](leaderboard-cards.md)
+
+</div>
+
 Leaderboard cards display server rankings and leaderboards. They can show the top users in various categories like XP, levels, or custom metrics.
 
 <div align="center">

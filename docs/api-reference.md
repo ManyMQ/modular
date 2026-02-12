@@ -1,5 +1,14 @@
 # API Reference
 
+<div align="center">
+
+**Complete API reference for the Modular rendering engine**
+
+[![Version](https://img.shields.io/npm/v/modular?style=flat-square&logo=npm)](https://npmjs.com/package/modular)
+[![TypeScript](https://img.shields.io/npm/types/modular?style=flat-square&logo=typescript)](https://typescriptlang.org)
+
+</div>
+
 Complete API reference for the Modular rendering engine.
 
 ## Table of Contents
@@ -508,9 +517,9 @@ card.setProgress(0.225); // 45/200 seconds
 interface LeaderboardCardBuilder extends BaseCardBuilder {
   setEntries(entries: LeaderboardEntry[]): this;
   setHighlightRank(rank: number): this;
-  setShowAvatars(enabled: boolean): this;
+  setShowAvatars(show: boolean): this;
   setMaxEntries(max: number): this;
-  setColumns(columns: LeaderboardColumn[]): this;
+  setColumns(columns: ColumnConfig[]): this;
 }
 ```
 
@@ -529,7 +538,6 @@ interface LeaderboardEntry {
   xp: number;
   level?: number;
   score?: number;
-  custom?: Record<string, any>;
 }
 ```
 
@@ -543,20 +551,6 @@ card.setEntries([
 ]);
 ```
 
-#### setHighlightRank()
-
-```typescript
-card.setHighlightRank(rank: number): this
-```
-
-Highlight a specific rank.
-
-**Example:**
-
-```javascript
-card.setHighlightRank(interaction.user.id);
-```
-
 ---
 
 ### Invite Card Specific Methods
@@ -564,7 +558,8 @@ card.setHighlightRank(interaction.user.id);
 ```typescript
 interface InviteCardBuilder extends BaseCardBuilder {
   setInvites(invites: InviteStats): this;
-  setInviter(inviter?: Discord.User): this;
+  setHighlightUser(userId: string): this;
+  setTimePeriod(period: 'alltime' | 'weekly' | 'monthly'): this;
 }
 ```
 
@@ -582,7 +577,7 @@ interface InviteStats {
   regular: number;
   fake: number;
   leaves: number;
-  bonus: number;
+  bonus?: number;
 }
 ```
 
@@ -622,9 +617,9 @@ Set profile information.
 interface ProfileInfo {
   joinDate?: string;
   accountAge?: string;
-  description?: string;
-  location?: string;
-  occupation?: string;
+  badges?: string[];
+  title?: string;
+  bio?: string;
 }
 ```
 
@@ -635,8 +630,7 @@ interface ProfileInfo {
 ```typescript
 interface WelcomeCardBuilder extends BaseCardBuilder {
   setMessage(message: string): this;
-  setMemberCount(count: number): this;
-  setLeaveAnimation(enabled: boolean): this;
+  setGuest(guest: boolean): this;
 }
 ```
 
@@ -658,7 +652,9 @@ card.setMessage('Welcome to our server, {user}!');
 
 ## Theme System
 
-### Registering a Theme
+### themes.register(name, theme)
+
+Register a custom theme.
 
 ```typescript
 engine.themes.register(name: string, theme: Theme): void
@@ -667,9 +663,8 @@ engine.themes.register(name: string, theme: Theme): void
 **Example:**
 
 ```javascript
-const myTheme = {
+engine.themes.register('my-theme', {
   name: 'my-theme',
-  version: '1.0.0',
   colors: {
     background: '#1a1a2e',
     primary: '#00ffcc',
@@ -689,32 +684,21 @@ const myTheme = {
     title: 'Montserrat Bold',
     body: 'Inter',
     mono: 'JetBrains Mono'
-  },
-  effects: {
-    glow: true,
-    shadow: true,
-    gradient: true
-  },
-  borderRadius: 16,
-  padding: 20
-};
-
-engine.themes.register('custom', myTheme);
+  }
+});
 ```
 
-### Getting a Theme
+### themes.get(name)
+
+Get a theme by name.
 
 ```typescript
 engine.themes.get(name: string): Theme
 ```
 
-### Applying a Theme
+### themes.list()
 
-```typescript
-engine.themes.apply(name: string): void
-```
-
-### Listing Themes
+List all registered themes.
 
 ```typescript
 engine.themes.list(): string[]
@@ -724,199 +708,112 @@ engine.themes.list(): string[]
 
 ## Token System
 
-### Setting Tokens
+### tokens.set(key, value)
+
+Set a global design token.
 
 ```typescript
 engine.tokens.set(key: string, value: any): void
-card.tokens.set(key: string, value: any): void
 ```
 
-### Getting Tokens
+### tokens.get(key)
+
+Get a global token value.
 
 ```typescript
 engine.tokens.get(key: string): any
-card.tokens.get(key: string): any
 ```
 
-### Merging Tokens
+### tokens.merge(tokens)
+
+Merge multiple tokens.
 
 ```typescript
 engine.tokens.merge(tokens: Record<string, any>): void
-card.tokens.merge(tokens: Record<string, any>): void
-```
-
-### Deleting Tokens
-
-```typescript
-engine.tokens.delete(key: string): void
-card.tokens.delete(key: string): void
 ```
 
 ---
 
 ## Plugin System
 
-### Creating a Plugin
+### plugins.register(plugin)
+
+Register a plugin.
 
 ```typescript
-class MyPlugin extends BasePlugin {
-  constructor() {
-    super('my-plugin', '1.0.0');
-  }
-
-  onInit() {
-    // Called when plugin is registered
-  }
-
-  onPreRender(context: RenderContext) {
-    // Called before rendering
-  }
-
-  onPostRender(buffer: Buffer) {
-    // Called after rendering
-    return buffer;
-  }
-
-  onError(error: Error) {
-    // Called when an error occurs
-  }
+interface Plugin {
+  name: string;
+  version?: string;
+  register?: (engine: Engine) => void;
+  render?: (card: BaseCardBuilder) => void;
 }
 ```
 
-### Registering a Plugin
+### plugins.get(name)
+
+Get a plugin by name.
 
 ```typescript
-engine.plugins.register(plugin: Plugin): void
+engine.plugins.get(name: string): Plugin
 ```
-
-### Plugin Hooks Reference
-
-| Hook | Parameters | Description |
-|------|------------|-------------|
-| `onInit` | - | Called when plugin is registered |
-| `onPreRender` | RenderContext | Called before rendering |
-| `onPostRender` | Buffer | Called after rendering |
-| `onThemeApplied` | Theme | Called when theme is applied |
-| `onCardSend` | Interaction | Called before sending |
-| `onError` | Error | Called on error |
 
 ---
 
 ## Component Registry
 
-### Registering a Component
+### components.register(name, component)
+
+Register a custom component.
 
 ```typescript
 engine.components.register(name: string, component: Component): void
 ```
 
-### Getting a Component
+### components.get(name)
+
+Get a component by name.
 
 ```typescript
 engine.components.get(name: string): Component
-```
-
-### Overriding a Component
-
-```typescript
-engine.components.override(name: string, component: Component): void
 ```
 
 ---
 
 ## Rendering
 
-### Synchronous Render
+### toBuffer()
+
+Render the card and return as PNG buffer.
 
 ```typescript
-card.render(): Promise<Buffer>
+card.toBuffer(): Promise<Buffer>
 ```
 
-### Async Render
+### toStream()
+
+Render the card and return as PNG stream.
 
 ```typescript
-card.renderAsync(): Promise<Buffer>
-```
-
-### Low-level Rendering
-
-```typescript
-engine.render(card): Promise<Buffer>
+card.toStream(): Promise<Stream>
 ```
 
 ---
 
 ## Performance APIs
 
-### Cache Operations
+### cache.clear()
+
+Clear the asset cache.
 
 ```typescript
-// Clear cache
-engine.cache.clear();
-
-// Get cache statistics
-const stats = engine.cache.getStats();
-// Returns: { size: number, hits: number, misses: number }
+engine.cache.clear(): void
 ```
 
-### Pool Operations
+### cache.getStats()
+
+Get cache statistics.
 
 ```typescript
-// Acquire canvas from pool
-const canvas = await engine.pool.acquire();
-
-// Release canvas back to pool
-engine.pool.release(canvas);
-```
-
-### Render Statistics
-
-```typescript
-const stats = engine.getRenderStats();
-// Returns: { renderTime: number, cacheHits: number, assetsLoaded: number }
-```
-
----
-
-## Types
-
-### Discord Types
-
-```typescript
-interface DiscordUser {
-  id: string;
-  username: string;
-  discriminator: string;
-  avatar: string | null;
-  displayAvatarURL(): string;
-}
-
-interface DiscordGuild {
-  id: string;
-  name: string;
-  iconURL(): string | null;
-}
-
-interface DiscordInteraction {
-  user: DiscordUser;
-  guild: DiscordGuild | null;
-  reply(options: object): Promise<void>;
-  followUp(options: object): Promise<void>;
-}
-```
-
-### Render Types
-
-```typescript
-interface RenderContext {
-  card: CardBuilder;
-  theme: Theme;
-  tokens: TokenStore;
-  canvas: Canvas;
-  width: number;
-  height: number;
-}
-
 interface CacheStats {
   size: number;
   hits: number;
@@ -927,34 +824,111 @@ interface CacheStats {
 
 ---
 
-## Error Handling
+## Types
+
+### Complete Type Definitions
 
 ```typescript
-try {
-  const card = engine.createRankCard()
-    .setUser(user)
-    .setStats({ /* stats */ });
-  await card.send(interaction);
-} catch (error) {
-  if (error instanceof RenderError) {
-    console.error('Rendering failed:', error.message);
-  } else if (error instanceof AssetLoadError) {
-    console.error('Failed to load asset:', error.url);
-  } else {
-    console.error('Unknown error:', error);
-  }
+// Engine Types
+interface Engine {
+  createRankCard(): RankCardBuilder;
+  createMusicCard(): MusicCardBuilder;
+  createLeaderboardCard(): LeaderboardCardBuilder;
+  createInviteCard(): InviteCardBuilder;
+  createProfileCard(): ProfileCardBuilder;
+  createWelcomeCard(): WelcomeCardBuilder;
+  themes: ThemeRegistry;
+  tokens: TokenRegistry;
+  plugins: PluginRegistry;
+  components: ComponentRegistry;
+  cache: CacheManager;
+  fonts: FontManager;
+}
+
+// Card Types
+interface RankCardBuilder extends BaseCardBuilder {
+  setStats(stats: RankStats): this;
+  setProgressColor(color: string): this;
+  setRankPosition(position: 'left' | 'right' | 'center'): this;
+}
+
+interface MusicCardBuilder extends BaseCardBuilder {
+  setTrack(track: TrackInfo): this;
+  setProgress(progress: number): this;
+  setControls(enabled: boolean): this;
+}
+
+interface LeaderboardCardBuilder extends BaseCardBuilder {
+  setEntries(entries: LeaderboardEntry[]): this;
+  setHighlightRank(rank: number): this;
+  setShowAvatars(show: boolean): this;
+}
+
+interface InviteCardBuilder extends BaseCardBuilder {
+  setInvites(invites: InviteStats): this;
+  setHighlightUser(userId: string): this;
+}
+
+interface ProfileCardBuilder extends BaseCardBuilder {
+  setInfo(info: ProfileInfo): this;
+  setBadges(badges: Badge[]): this;
+}
+
+interface WelcomeCardBuilder extends BaseCardBuilder {
+  setMessage(message: string): this;
+  setGuest(guest: boolean): this;
+}
+
+// Configuration Types
+interface EngineOptions {
+  dpi?: number;
+  cache?: {
+    maxSize: number;
+    maxAge?: number;
+  };
+  debug?: boolean;
+  canvas?: boolean;
+  defaultTheme?: string;
+  fonts?: {
+    default?: string;
+    path?: string;
+  };
+}
+
+interface CardOptions {
+  width?: number;
+  height?: number;
+  format?: 'png' | 'jpeg';
+  quality?: number;
+  background?: string;
+  cache?: boolean;
+}
+
+interface BackgroundConfig {
+  type: 'color' | 'gradient' | 'image';
+  value?: string;
+  colors?: string[];
+  direction?: 'horizontal' | 'vertical' | 'diagonal';
+  opacity?: number;
 }
 ```
 
 ---
 
-## Changelog
-
-See [CHANGELOG.md](../CHANGELOG.md) for version history.
-
 ## Related Documentation
 
-- [Getting Started](getting-started.md)
-- [Themes](themes.md)
-- [Plugins](plugins.md)
-- [Performance](api-reference.md#performance-apis)
+- [Getting Started](getting-started.md) - Quick start guide
+- [Themes](themes.md) - Theme customization
+- [Output Guide](output-guide.md) - Output options
+- [Rank Cards](rank-cards.md) - Rank card guide
+- [Music Cards](music-cards.md) - Music card guide
+- [Leaderboard Cards](leaderboard-cards.md) - Leaderboard guide
+- [Invite Cards](invite-cards.md) - Invite card guide
+
+<div align="center">
+
+![Terms](assets/@modularterms.png)
+
+*Complete API reference*
+
+</div>

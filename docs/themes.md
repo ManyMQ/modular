@@ -1,5 +1,13 @@
 # Theme System
 
+<div align="center">
+
+**Customize the appearance of your cards with themes**
+
+[![Themes](https://img.shields.io/npm/dw/modular?style=flat-square&logo=paintbrush)](themes.md)
+
+</div>
+
 Modular's theme system provides a powerful way to customize the appearance of your cards. Themes allow you to maintain consistent styling across all cards while providing flexibility for customization.
 
 <div align="center">
@@ -34,6 +42,7 @@ Themes in Modular are comprehensive styling objects that define:
 - **Layout** - Spacing, borders, padding
 
 Themes can be:
+
 - **Built-in** - Ready to use themes included with Modular
 - **Custom** - User-defined themes registered with the engine
 - **Dynamic** - Themes generated at runtime based on user input
@@ -499,44 +508,8 @@ engine.themes.register('dark-variant', darkVariant);
 ### Register Theme
 
 ```javascript
-engine.themes.register('theme-name', theme);
-```
-
-### Get Theme
-
-```javascript
-const theme = engine.themes.get('theme-name');
-```
-
-### List All Themes
-
-```javascript
-const themes = engine.themes.list();
-// Returns: ['cyberpunk', 'neon', 'dark', 'midnight', 'ocean', 'sunset', 'theme-name']
-```
-
-### Check Theme Exists
-
-```javascript
-const exists = engine.themes.list().includes('theme-name');
-```
-
-### Remove Theme
-
-```javascript
-// Not directly supported - themes are immutable after registration
-// Re-create engine instance without the theme
-```
-
----
-
-## Theme Inheritance
-
-Themes can extend other themes:
-
-```javascript
-const baseTheme = {
-  name: 'base',
+engine.themes.register('my-theme', {
+  name: 'my-theme',
   colors: {
     background: '#1a1a2e',
     primary: '#00ffcc',
@@ -557,45 +530,74 @@ const baseTheme = {
     body: 'Inter',
     mono: 'JetBrains Mono'
   }
-};
+});
+```
 
-// Variant with color changes only
-const neonVariant = {
+### Get Theme
+
+```javascript
+const theme = engine.themes.get('cyberpunk');
+console.log(theme.colors.primary); // '#00ffcc'
+```
+
+### List Themes
+
+```javascript
+const themes = engine.themes.list();
+console.log(themes); // ['cyberpunk', 'neon', 'dark', 'midnight', 'light', 'ocean', 'sunset', 'my-theme']
+```
+
+### Delete Theme
+
+```javascript
+engine.themes.delete('my-theme');
+```
+
+---
+
+## Theme Inheritance
+
+Themes can extend other themes to create variants:
+
+```javascript
+const baseTheme = engine.themes.get('dark');
+
+const customTheme = {
   ...baseTheme,
-  name: 'neon-variant',
+  name: 'custom-dark',
+  description: 'Custom dark theme variant',
   colors: {
     ...baseTheme.colors,
-    primary: '#ff00ff',
-    accent: '#00ffff'
+    primary: '#ff00ff',  // Override primary color
+    background: '#0a0a0a'  // Override background
   }
 };
 
-engine.themes.register('neon-variant', neonVariant);
+engine.themes.register('custom-dark', customTheme);
 ```
 
 ---
 
 ## Dynamic Themes
 
-Generate themes at runtime:
+Generate themes at runtime based on user input:
 
 ```javascript
-// Generate theme based on user color
-function generateTheme(accentColor) {
+function createDynamicTheme(userColor) {
   return {
-    name: `theme-${accentColor}`,
+    name: 'dynamic',
     colors: {
       background: '#1a1a2e',
-      primary: accentColor,
-      secondary: adjustColor(accentColor, 30),
-      accent: adjustColor(accentColor, -30),
+      primary: userColor,
+      secondary: '#ff00ff',
+      accent: '#ffff00',
       text: {
         primary: '#ffffff',
         secondary: '#b3b3b3',
         muted: '#666666'
       },
       progress: {
-        fill: accentColor,
+        fill: userColor,
         background: '#333333'
       }
     },
@@ -607,8 +609,9 @@ function generateTheme(accentColor) {
   };
 }
 
-const userTheme = generateTheme('#ff00ff');
-card.useTheme(userTheme);
+const userTheme = createDynamicTheme('#ff6600');
+engine.themes.register('user-theme', userTheme);
+card.useTheme('user-theme');
 ```
 
 ---
@@ -620,80 +623,77 @@ card.useTheme(userTheme);
 ```javascript
 // Good - semantic naming
 colors: {
-  background: '#1a1a2e',
-  primary: '#00ffcc',    // Main accent
-  secondary: '#ff00ff',  // Secondary accent
-  success: '#10b981',    // Positive feedback
-  warning: '#f59e0b',    // Warnings
-  error: '#ef4444'       // Errors
+  primary: '#00ffcc',
+  secondary: '#ff00ff',
+  accent: '#ffff00'
 }
 
 // Avoid - unclear purpose
 colors: {
-  background: '#1a1a2e',
   color1: '#00ffcc',
   color2: '#ff00ff',
   color3: '#ffff00'
 }
 ```
 
-### 2. Consistent Typography
+### 2. Define Color Variables
 
 ```javascript
-// Good - consistent font stack
-fonts: {
-  title: 'Montserrat Bold, sans-serif',
-  body: 'Inter, sans-serif',
-  mono: 'JetBrains Mono, monospace'
-}
-```
+const brandColors = {
+  cyan: '#00ffcc',
+  magenta: '#ff00ff',
+  yellow: '#ffff00'
+};
 
-### 3. Test in Different Contexts
-
-```javascript
-// Test light and dark themes
-const lightCard = engine.createCard().useTheme('light');
-const darkCard = engine.createCard().useTheme('dark');
-```
-
-### 4. Version Your Themes
-
-```javascript
 const theme = {
-  name: 'my-theme',
-  version: '1.0.0',  // Track version for updates
-  // ...
+  colors: {
+    primary: brandColors.cyan,
+    secondary: brandColors.magenta,
+    accent: brandColors.yellow
+  }
 };
 ```
 
-### 5. Document Custom Themes
+### 3. Test Across Themes
 
 ```javascript
-/**
- * My Custom Theme
- * 
- * Description: A vibrant cyberpunk-inspired theme
- * Author: Your Name
- * Version: 1.0.0
- * 
- * Usage:
- *   card.useTheme('my-custom-theme');
- */
-const myTheme = { /* ... */ };
+// Always test your cards with multiple themes
+const themes = ['dark', 'light', 'neon', 'cyberpunk'];
+
+themes.forEach(themeName => {
+  card.useTheme(themeName);
+  const buffer = await card.toBuffer();
+  // Verify the card looks good
+});
+```
+
+### 4. Document Custom Themes
+
+```javascript
+const myTheme = {
+  name: 'my-theme',
+  description: 'Custom theme for server X',
+  author: 'Your Name',
+  version: '1.0.0',
+  // ... rest of theme
+};
+
+engine.themes.register('my-theme', myTheme);
 ```
 
 ---
 
 ## Related Documentation
 
-- [Getting Started](getting-started.md)
-- [API Reference](api-reference.md)
-- [Token System](api-reference.md#token-system)
+- [Getting Started](getting-started.md) - Quick start guide
+- [API Reference](api-reference.md) - Complete API documentation
+- [Output Guide](output-guide.md) - Export options
+- [Design Tokens](getting-started.md#-using-design-tokens) - Token system
 
 <div align="center">
 
 ![Terms](assets/@modularterms.png)
 
-*Professional documentation for professional tools*
+*Customize your cards with themes*
 
 </div>

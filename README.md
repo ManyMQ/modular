@@ -1,66 +1,43 @@
-# Modular
+# <div align="center"><img src="docs/assets/@modularlight_transparent.png" alt="Modular" width="400"/></div>
 
 <div align="center">
 
-![Modular Banner](docs/assets/@modulartransparent.png)
+**A powerful, flexible, and themeable card generation library for Discord bots**
 
-**Production-grade Node.js canvas rendering engine for Discord cards**
-
-[![npm version](https://img.shields.io/npm/v/modular.svg)](https://www.npmjs.com/package/modular)
-[![node](https://img.shields.io/node/v/modular.svg)](https://nodejs.org)
-[![license](https://img.shields.io/npm/l/modular.svg)](https://opensource.org/licenses/MIT)
-[![discord](https://img.shields.io/discord/1234567890)](https://discord.gg/example)
-
-</div>
-
-<div align="center">
-
-![Dark Theme](docs/assets/@modulardark_transparent.png)
-
-*Create stunning cards with built-in themes*
+[![Discord Server](https://img.shields.io/discord/1234567890?style=flat-square&logo=discord&label=Discord)](https://discord.gg/example)
+[![npm version](https://img.shields.io/npm/v/@modulardark/example?style=flat-square&logo=npm)](https://npmjs.com/package/modular)
+[![npm downloads](https://img.shields.io/npm/dw/modular?style=flat-square&logo=npm)](https://npmjs.com/package/modular)
+[![License](https://img.shields.io/github/license/example/modular?style=flat-square)](LICENSE)
+[![Stars](https://img.shields.io/github/stars/example/modular?style=flat-square)](https://github.com/example/modular/stargazers)
 
 </div>
-
----
 
 ## 📋 Table of Contents
 
 - [✨ Features](#-features)
 - [🚀 Quick Start](#-quick-start)
 - [📖 Documentation](#-documentation)
-- [🎮 Card Types](#-card-types)
 - [🎨 Themes](#-themes)
-- [🧬 Token System](#-token-system)
-- [🔧 Architecture](#-architecture)
-- [📦 API Reference](#-api-reference)
-- [🧩 Plugin System](#-plugin-system)
-- [⚡ Performance](#-performance)
+- [💻 Examples](#-examples)
 - [🤝 Contributing](#-contributing)
-- [📄 License](#-license)
+- [📝 License](#-license)
 
 ---
 
 ## ✨ Features
 
-Modular is a powerful, flexible canvas rendering engine designed specifically for Discord bots. Here's what makes it special:
+<div align="center">
 
-### Core Features
+| Feature | Description |
+|---------|-------------|
+| 🎨 **Themeable** | Multiple built-in themes with full customization |
+| 🃏 **Card Types** | Profile, Rank, Level, Welcome, Leaderboard, Music, and more |
+| ⚡ **Fast & Lightweight** | Optimized rendering pipeline |
+| 🔌 **Plugin System** | Extend functionality with plugins |
+| 🎯 **TypeScript Ready** | Full type definitions included |
+| 🌙 **Dark/Light Modes** | Automatic theme detection |
 
-- 🎨 **Multiple Card Types** - Rank, Profile, Music, Leaderboard, Invite, and Welcome cards out of the box
-- 🎯 **Theme System** - Built-in themes and custom theme support with full customization
-- 🧬 **Token System** - Design tokens for global and per-card styling overrides
-- 🔌 **Plugin Architecture** - Extend functionality with custom plugins and hooks
-- ⚡ **High Performance** - Optimized rendering pipeline with caching and pooling
-- 📐 **Component System** - Modular, replaceable components for any rendering need
-- 🎭 **Effects Engine** - Built-in support for gradients, shadows, glows, and animations
-
-### Technical Highlights
-
-- Written in modern JavaScript (ES2022+)
-- Native Node.js canvas rendering via `@napi-rs/canvas`
-- TypeScript definitions included for better IDE support
-- Promise-based async API
-- Battle-tested in production environments
+</div>
 
 ---
 
@@ -69,632 +46,180 @@ Modular is a powerful, flexible canvas rendering engine designed specifically fo
 ### Installation
 
 ```bash
-# Using npm
+# npm
 npm install modular
 
-# Using yarn
+# yarn
 yarn add modular
 
-# Using pnpm
+# pnpm
 pnpm add modular
 ```
-
-<div align="center">
-
-![Installation Guide](docs/assets/@modularinstallation.png)
-
-*Simple npm installation*
-
-</div>
 
 ### Basic Usage
 
 ```javascript
 const { createEngine } = require('modular');
-
-// Create engine instance
-const engine = createEngine({
-  dpi: 2,
-  cache: { maxSize: 100 },
-  debug: false
-});
-
-// Create a rank card
-const rankCard = engine.createRankCard()
-  .setUser(user)
-  .setStats({ level: 50, xp: 7500, maxXp: 10000, rank: 5 });
-
-// Send to Discord
-await rankCard.send(interaction);
-```
-
-### Discord.js Integration
-
-```javascript
-const { Client, GatewayIntentBits } = require('discord.js');
-const { createEngine } = require('modular');
-
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 const engine = createEngine();
 
-client.on('interactionCreate', async (interaction) => {
-  if (!interaction.isChatInputCommand()) return;
+// Create a profile card
+const card = engine.createProfileCard()
+  .setUser(user)
+  .setBackground('https://example.com/bg.jpg')
+  .setTheme('dark');
 
-  if (interaction.commandName === 'rank') {
-    const rankCard = engine.createRankCard()
-      .setUser(interaction.user)
-      .setStats({ level: 50, xp: 7500, maxXp: 10000, rank: 5 });
+await card.send(interaction);
+```
 
-    await rankCard.send(interaction);
+### From Setup to Send
+
+```javascript
+const { createEngine } = require('modular');
+const engine = createEngine({
+  defaultTheme: 'neon',
+  cache: {
+    enabled: true,
+    maxSize: 500
   }
 });
 
-client.login('YOUR_TOKEN');
+// Create and send a rank card
+const rankCard = engine.createRankCard()
+  .setUser(interaction.user)
+  .setXP({ current: 7500, next: 10000, percentage: 75 })
+  .setLevel(15)
+  .setRank(42);
+
+await rankCard.send(interaction);
 ```
 
 ---
 
 ## 📖 Documentation
 
-For full documentation, visit our [Documentation Portal](docs/getting-started.md).
-
 <div align="center">
 
-![Documentation](docs/assets/@modulardocumentation.png)
-
-*Comprehensive documentation*
+| Section | Description |
+|---------|-------------|
+| [Getting Started](docs/getting-started.md) | Installation, setup, and basic usage |
+| [API Reference](docs/api-reference.md) | Complete API documentation |
+| [Themes](docs/themes.md) | Theme customization guide |
+| [Output Guide](docs/output-guide.md) | Export and deployment options |
 
 </div>
-
-### Getting Started
-
-New to Modular? Start with our [Getting Started Guide](docs/getting-started.md) to learn the basics.
-
-### Guides & Tutorials
-
-- [Installation Guide](docs/getting-started.md#installation)
-- [Creating Your First Card](docs/getting-started.md#card-creation)
-- [Theme Customization](docs/themes.md)
-- [Plugin Development](docs/api-reference.md#plugin-system)
-
-### API Reference
-
-- [Core API](docs/api-reference.md)
-- [Card Builders](docs/api-reference.md#card-builder-methods)
-- [Theme System](docs/api-reference.md#theme-system)
-- [Token System](docs/api-reference.md#token-system)
-- [Plugin System](docs/api-reference.md#plugin-system)
-
----
-
-## 🎮 Card Types
-
-Modular supports a variety of card types for different Discord bot use cases:
-
-| Card Type | Method | Description |
-|-----------|--------|-------------|
-| **Rank** | `engine.createRankCard()` | Level/XP progress cards with rank display |
-| **Music** | `engine.createMusicCard()` | Music player displays with progress bar |
-| **Leaderboard** | `engine.createLeaderboardCard()` | Server rankings and leaderboards |
-| **Invite** | `engine.createInviteCard()` | Invite tracking and statistics |
-| **Profile** | `engine.createProfileCard()` | User profile cards |
-| **Welcome** | `engine.createWelcomeCard()` | Welcome messages for new members |
-
-### Example: Rank Card
-
-```javascript
-const rankCard = engine.createRankCard()
-  .setUser(user)
-  .setGuild(guild)
-  .setTheme('cyberpunk')
-  .setStats({
-    level: 50,
-    xp: 7500,
-    maxXp: 10000,
-    rank: 5,
-    totalXp: 150000
-  })
-  .setBackground({
-    type: 'gradient',
-    colors: ['#1a1a2e', '#16213e']
-  });
-
-await rankCard.send(interaction);
-```
-
-### Example: Music Card
-
-```javascript
-const musicCard = engine.createMusicCard()
-  .setUser(user)
-  .setTrack({
-    title: 'Favorite Song',
-    artist: 'Best Artist',
-    album: 'Great Album',
-    coverUrl: 'https://example.com/cover.jpg',
-    duration: 180,
-    position: 45
-  })
-  .setTheme('neon');
-
-await musicCard.send(interaction);
-```
 
 ---
 
 ## 🎨 Themes
 
-Modular comes with several built-in themes ready to use:
+Modular comes with multiple stunning themes out of the box:
 
 <div align="center">
 
-![Light Theme](docs/assets/@modularlight_transparent.png)
-
-*Light theme option*
+| Theme | Preview |
+|-------|---------|
+| 🌙 **Dark** | Classic dark theme |
+| ✨ **Neon** | Cyberpunk neon aesthetics |
+| 🌊 **Ocean** | Blue ocean vibes |
+| 🌸 **Sakura** | Cherry blossom theme |
+| 🔥 **Fire** | Fiery red theme |
+| 💜 **Midnight** | Deep purple midnight |
 
 </div>
-
-### Built-in Themes
-
-| Theme | Description |
-|-------|-------------|
-| `cyberpunk` | Neon cyberpunk aesthetic with glowing effects |
-| `neon` | Vibrant neon glow effects |
-| `dark` | Clean, modern dark theme |
-| `midnight` | Deep midnight blue gradient |
-| `light` | Minimalist light theme |
-| `ocean` | Ocean blue gradient theme |
-| `sunset` | Warm sunset gradient theme |
 
 ### Using Themes
 
 ```javascript
-// Apply a built-in theme
-card.useTheme('cyberpunk');
+// Built-in themes
+card.setTheme('neon');
 
-// Apply a custom theme
-const myTheme = {
-  name: 'my-custom-theme',
-  colors: {
-    background: '#1a1a2e',
-    primary: '#00ffcc',
-    secondary: '#ff00ff',
-    accent: '#ffff00'
-  },
-  fonts: {
-    title: 'Montserrat Bold',
-    body: 'Inter',
-    mono: 'JetBrains Mono'
-  },
-  effects: {
-    glow: true,
-    shadow: true,
-    gradient: true
-  }
-};
-
-engine.themes.register('custom', myTheme);
-card.useTheme('custom');
-```
-
-### Theme Structure
-
-```typescript
-interface Theme {
-  name: string;
-  colors: {
-    background: string;
-    primary: string;
-    secondary: string;
-    accent: string;
-    text: {
-      primary: string;
-      secondary: string;
-      muted: string;
-    };
-    progress: {
-      fill: string;
-      background: string;
-    };
-  };
-  fonts: {
-    title: string;
-    body: string;
-    mono: string;
-  };
-  effects?: {
-    glow?: boolean;
-    shadow?: boolean;
-    gradient?: boolean;
-    blur?: boolean;
-  };
-  borderRadius?: number;
-  padding?: number;
-}
+// Custom theme
+card.setTheme({
+  name: 'custom',
+  background: '#1a1a2e',
+  primary: '#00ffcc',
+  secondary: '#ff00ff'
+});
 ```
 
 ---
 
-## 🧬 Token System
+## 💻 Examples
 
-Modular uses a design token system for granular control over styling. Tokens can be set globally on the engine or per-card.
-
-### Global Tokens
+### Profile Card
 
 ```javascript
-// Set tokens globally
-engine.tokens.set('card.background', '#1a1a2e');
-engine.tokens.set('text.primary', '#00ffcc');
-engine.tokens.set('text.fontFamily', 'Inter');
-engine.tokens.set('progress.fill', '#ff00ff');
-engine.tokens.set('avatar.border', '#00ffcc');
-engine.tokens.set('card.borderRadius', 16);
+const card = engine.createProfileCard()
+  .setUser(user)
+  .setAvatar(user.displayAvatarURL({ size: 256 }))
+  .setUsername(user.username)
+  .setDiscriminator(user.discriminator)
+  .setBackground('https://example.com/bg.jpg')
+  .setTheme('neon')
+  .setStats({
+    level: 25,
+    xp: 12500,
+    rank: 150
+  });
+
+await card.send(interaction);
 ```
 
-### Per-Card Tokens
+### Rank Card
 
 ```javascript
-// Override tokens for specific cards
-card.tokens.set('card.background', '#0a0a0a');
-card.tokens.set('text.primary', '#ff00ff');
-card.tokens.set('progress.fill', '#ff00ff');
+const rankCard = engine.createRankCard()
+  .setUser(interaction.user)
+  .setLevel(42)
+  .setRank(5)
+  .setXP({ current: 8500, next: 10000, percentage: 85 })
+  .setTheme('dark')
+  .addBadge({ type: 'online', position: 'top-right' });
+
+await rankCard.send(interaction);
 ```
 
-### Available Tokens
-
-```typescript
-// Card tokens
-'card.width'              // Card width (default: 800)
-'card.height'             // Card height (default: 250)
-'card.background'         // Background color
-'card.gradient'            // Gradient configuration
-'card.border'             // Border style
-'card.borderRadius'       // Border radius
-'card.shadow'              // Shadow effect
-'card.padding'             // Padding
-
-// Text tokens
-'text.primary'            // Primary text color
-'text.secondary'          // Secondary text color
-'text.muted'              // Muted text color
-'text.fontFamily'         // Font family
-'text.fontSize'           // Font size
-'text.fontWeight'         // Font weight
-'text.align'              // Text alignment
-
-// Progress tokens
-'progress.fill'           // Progress bar fill color
-'progress.background'     // Progress bar background
-'progress.height'         // Progress bar height
-'progress.borderRadius'   // Progress bar radius
-
-// Avatar tokens
-'avatar.size'             // Avatar size
-'avatar.border'           // Avatar border color
-'avatar.borderWidth'      // Avatar border width
-'avatar.shape'            // Avatar shape (circle, square, rounded)
-```
-
----
-
-## 🔧 Architecture
-
-Modular is built with a modular architecture in mind, consisting of several core components:
-
-```
-Modular Architecture
-├── 🎨 Render Engine
-│   ├── 📐 Layout Parser
-│   ├── 🎭 Theme Resolver
-│   ├── 🧬 Token Engine
-│   └── 🎨 Style Engine
-├── 🧩 Component System
-│   ├── BaseComponent
-│   ├── UI Components
-│   │   ├── TextComponent
-│   │   ├── AvatarComponent
-│   │   ├── ContainerComponent
-│   │   ├── ProgressComponent
-│   │   └── MediaComponent
-│   └── Card Components
-│       └── CardRenderer
-├── 🔌 Plugin System
-│   ├── PluginManager
-│   └── Plugin Lifecycle Hooks
-├── 📦 Asset System
-│   ├── AssetLoader
-│   ├── AssetCache
-│   └── FontManager
-└── ⚡ Performance Layer
-    ├── CanvasRenderer
-    ├── BufferManager
-    └── LRUCache
-```
-
-### Render Pipeline
-
-```
-┌─────────────────┐
-│ Layout Resolve  │
-└────────┬────────┘
-         ▼
-┌─────────────────┐
-│ Token Resolve   │
-└────────┬────────┘
-         ▼
-┌─────────────────┐
-│ Theme Resolve   │
-└────────┬────────┘
-         ▼
-┌─────────────────┐
-│ Asset Loading   │
-└────────┬────────┘
-         ▼
-┌─────────────────┐
-│ Pre Render Hook │
-└────────┬────────┘
-         ▼
-┌─────────────────┐
-│ Component Render│
-└────────┬────────┘
-         ▼
-┌─────────────────┐
-│ FX Pass         │
-└────────┬────────┘
-         ▼
-┌─────────────────┐
-│ Post Render Hook│
-└────────┬────────┘
-         ▼
-┌─────────────────┐
-│ Encode Output   │
-└─────────────────┘
-```
-
----
-
-## 📦 API Reference
-
-### createEngine(options)
-
-Create a new engine instance with optional configuration.
-
-```typescript
-function createEngine(options?: EngineOptions): Engine
-
-interface EngineOptions {
-  dpi?: number;              // Render DPI (default: 2)
-  cache?: { maxSize: number };  // Cache max size (default: 100)
-  debug?: boolean;           // Debug mode (default: false)
-  canvas?: boolean;          // Enable canvas (default: true)
-}
-```
-
-### Engine Methods
-
-| Method | Description |
-|--------|-------------|
-| `createRankCard()` | Create a new rank card builder |
-| `createMusicCard()` | Create a new music card builder |
-| `createLeaderboardCard()` | Create a new leaderboard builder |
-| `createInviteCard()` | Create a new invite tracker builder |
-| `createProfileCard()` | Create a new profile card builder |
-| `createWelcomeCard()` | Create a new welcome card builder |
-| `themes.register(name, theme)` | Register a custom theme |
-| `tokens.set(key, value)` | Set a design token |
-| `plugins.register(plugin)` | Register a plugin |
-| `components.register(name, component)` | Register a component |
-
-### CardBuilder Methods
-
-All card builders support these methods:
-
-```typescript
-// User & Guild
-card.setUser(user: Discord.User)
-card.setGuild(guild: Discord.Guild)
-
-// Styling
-card.setTheme(name: string)
-card.setTokens(tokens: Record<string, any>)
-card.setBackground(config: BackgroundConfig)
-
-// Rendering
-card.toBuffer(): Promise<Buffer>
-card.toStream(): Promise<Stream>
-card.render(): Promise<Buffer>
-
-// Discord Integration
-card.send(interaction): Promise<Message>
-card.reply(interaction): Promise<Message>
-card.followUp(interaction): Promise<Message>
-```
-
-### Rank Card Specific Methods
-
-```typescript
-card.setStats({
-  level: number,
-  xp: number,
-  maxXp: number,
-  rank: number,
-  totalXp?: number
-})
-```
-
-### Music Card Specific Methods
-
-```typescript
-card.setTrack({
-  title: string,
-  artist: string,
-  album?: string,
-  coverUrl?: string,
-  duration: number,
-  position: number
-})
-```
-
----
-
-## 🧩 Plugin System
-
-Modular's plugin system allows you to extend functionality with custom hooks and features.
-
-### Creating a Plugin
+### Leaderboard Card
 
 ```javascript
-const { BasePlugin } = require('modular');
+const leaderboard = engine.createLeaderboardCard()
+  .setGuild(interaction.guild)
+  .setEntries(topUsers.map((user, i) => ({
+    rank: i + 1,
+    user: user,
+    xp: user.xp,
+    level: user.level
+  })))
+  .setTheme('midnight');
 
-class MyPlugin extends BasePlugin {
-  constructor() {
-    super('my-plugin', '1.0.0');
-  }
-
-  onPreRender(context) {
-    // Add custom pre-render logic
-    console.log('Pre-render hook:', context.card);
-  }
-
-  onPostRender(buffer) {
-    // Modify the rendered output
-    return buffer;
-  }
-
-  onThemeApplied(theme) {
-    // Respond to theme changes
-  }
-}
-
-// Register the plugin
-engine.plugins.register(new MyPlugin());
+await leaderboard.send(interaction);
 ```
-
-### Plugin Lifecycle Hooks
-
-| Hook | Description |
-|------|-------------|
-| `onInit` | Called when plugin is registered |
-| `onPreRender` | Called before rendering begins |
-| `onPostRender` | Called after rendering completes |
-| `onThemeApplied` | Called when a theme is applied |
-| `onCardSend` | Called before card is sent to Discord |
-| `onError` | Called when an error occurs |
-
----
-
-## ⚡ Performance
-
-Modular includes several performance optimizations:
-
-### Caching
-
-- **Asset Caching** - Images and fonts are cached to avoid reloading
-- **Gradient Caching** - Pre-rendered gradients for reuse
-- **LRU Cache** - Least Recently Used cache for memory management
-
-### Rendering Optimizations
-
-- **Canvas Pooling** - Reuse canvas instances to reduce GC pressure
-- **Async Asset Loading** - Load assets in parallel
-- **Batch Rendering** - Render multiple elements in a single pass
-- **DPI Scaling** - Configurable DPI for quality vs. performance
-
-### Performance Monitoring
-
-```javascript
-// Get cache statistics
-const cacheStats = engine.cache.getStats();
-
-// Get render statistics
-const renderStats = engine.getRenderStats();
-
-// Clear cache
-engine.cache.clear();
-```
-
-### Performance Tips
-
-1. **Reuse Engine Instance** - Create one engine instance per bot
-2. **Batch Card Rendering** - Use async/await for parallel rendering
-3. **Optimize Images** - Use optimized, compressed images
-4. **Configure DPI** - Lower DPI for better performance
-5. **Monitor Memory** - Use cache.clear() periodically
 
 ---
 
 ## 🤝 Contributing
 
-We welcome contributions! Please see our [Contributing Guide](docs/CONTRIBUTING.md) for details.
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-### Development Setup
-
-```bash
-# Clone the repository
-git clone https://github.com/modular/modular.git
-cd modular
-
-# Install dependencies
-npm install
-
-# Run development server
-npm run dev
-
-# Run tests
-npm test
-
-# Run linting
-npm run lint
-```
-
-### Building
-
-```bash
-# Build for production
-npm run build
-
-# Build TypeScript definitions
-npm run build:types
-```
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
 ---
 
-## 📄 License
+## 📝 License
 
-Modular is licensed under the MIT License.
-
-```
-MIT License
-
-Copyright (c) 2024 Modular Team
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-```
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
 <div align="center">
 
-![Terms](docs/assets/@modularterms.png)
+**Made with ❤️ by the Modular Team**
 
-**Built with ❤️ by the Modular Team**
-
-[Website](https://modular.js.org) • [Documentation](docs/getting-started.md) • [Discord](https://discord.gg/example) • [GitHub](https://github.com/modular/modular)
+[![Follow on GitHub](https://img.shields.io/github/followers/example?style=flat-square&logo=github)](https://github.com/example)
+[![Follow on Twitter](https://img.shields.io/twitter/follow/example?style=flat-square&logo=twitter)](https://twitter.com/example)
 
 </div>

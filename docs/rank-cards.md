@@ -1,12 +1,20 @@
 # Rank Cards
 
-Rank cards display user level, XP progress, and rank information. They are one of the most commonly used card types in Discord bots.
+<div align="center">
+
+**Display user levels, XP, and rank information**
+
+[![Rank Cards](https://img.shields.io/npm/dw/modular?style=flat-square&logo=trophy)](rank-cards.md)
+
+</div>
+
+Rank cards display user level, XP, and rank information with progress visualization.
 
 <div align="center">
 
-![Rank Card Preview](assets/@modulardark_transparent.png)
+![Rank Card Preview](assets/@modularlight_transparent.png)
 
-*Stunning rank cards with built-in themes*
+*Beautiful rank cards*
 
 </div>
 
@@ -14,8 +22,8 @@ Rank cards display user level, XP progress, and rank information. They are one o
 
 - [Overview](#overview)
 - [Basic Usage](#basic-usage)
-- [Stats Configuration](#stats-configuration)
-- [Customization](#customization)
+- [XP Configuration](#xp-configuration)
+- [Progress Visualization](#progress-visualization)
 - [Examples](#examples)
 - [Styling Options](#styling-options)
 
@@ -23,13 +31,14 @@ Rank cards display user level, XP progress, and rank information. They are one o
 
 ## Overview
 
-Rank cards provide a visual representation of a user's progress in your Discord server. They typically display:
+Rank cards provide a visual representation of a user's progress, including:
 
-- User avatar and name
+- User avatar and username
 - Current level
 - XP progress bar
 - Current rank
-- Additional stats (total XP, etc.)
+- Total XP accumulated
+- Badges and achievements
 
 ---
 
@@ -48,45 +57,47 @@ const rankCard = engine.createRankCard()
     level: 50,
     xp: 7500,
     maxXp: 10000,
-    rank: 5
+    rank: 5,
+    totalXp: 150000
   });
 
 await rankCard.send(interaction);
 ```
 
-### With Discord User Object
+### With Guild Context
 
 ```javascript
-// Using interaction user
 const rankCard = engine.createRankCard()
   .setUser(interaction.user)
-  .setStats({ level: 50, xp: 7500, maxXp: 10000, rank: 5 });
+  .setGuild(interaction.guild)
+  .setTheme('cyberpunk')
+  .setStats({
+    level: 42,
+    xp: 8500,
+    maxXp: 10000,
+    rank: 10
+  });
 
 await rankCard.send(interaction);
-
-// Using guild member
-const rankCard = engine.createRankCard()
-  .setUser(interaction.member)
-  .setGuild(interaction.guild)
-  .setStats({ level: 50, xp: 7500, maxXp: 10000, rank: 5 });
 ```
 
 ---
 
-## Stats Configuration
+## XP Configuration
 
-### Required Stats
+### Basic XP Info
 
 ```typescript
 interface RankStats {
-  level: number;       // Current level
-  xp: number;          // Current XP
-  maxXp: number;       // XP needed for next level
-  rank?: number;       // Current rank (optional)
+  level: number;      // Current level
+  xp: number;         // Current XP
+  maxXp: number;      // XP needed for next level
+  rank?: number;      // Server rank (optional)
+  totalXp?: number;   // Total XP (optional)
 }
 ```
 
-### Extended Stats
+### Extended XP Info
 
 ```typescript
 interface ExtendedRankStats {
@@ -94,113 +105,72 @@ interface ExtendedRankStats {
   xp: number;
   maxXp: number;
   rank?: number;
-  totalXp?: number;    // Total lifetime XP
-  previousXp?: number;  // XP at last level
-  nextLevelXp?: number; // XP needed for next level
+  totalXp?: number;
+  previousXp?: number;  // XP at last level up
+  xpToNextLevel?: number; // Calculated automatically
 }
 ```
 
-### Example with Extended Stats
+### XP Calculation
 
 ```javascript
-const rankCard = engine.createRankCard()
-  .setUser(user)
-  .setStats({
-    level: 50,
-    xp: 7500,
-    maxXp: 10000,
-    rank: 5,
-    totalXp: 150000,
-    previousXp: 6500,  // XP when reached level 50
-    nextLevelXp: 17500 // XP needed for level 51
-  });
+// Calculate XP needed for next level
+const xpToNextLevel = stats.maxXp - stats.xp;
+
+// Calculate progress percentage
+const progress = stats.xp / stats.maxXp;
+
+// Set XP with calculations
+card.setStats({
+  level: 50,
+  xp: 7500,
+  maxXp: 10000,
+  rank: 5,
+  totalXp: 150000,
+  xpToNextLevel: 2500
+});
 ```
 
 ---
 
-## Customization
+## Progress Visualization
 
-### Set Progress Color
+### Set Progress (0-1)
 
 ```javascript
-const rankCard = engine.createRankCard()
-  .setUser(user)
-  .setStats({ level: 50, xp: 7500, maxXp: 10000, rank: 5 })
-  .setProgressColor('#ff00ff');
+// Calculate progress ratio
+const progress = stats.xp / stats.maxXp;
+
+rankCard.setProgress(progress);
 ```
 
-### Set Rank Position
+### Manual Progress
 
 ```javascript
-// Rank badge on the left
-card.setRankPosition('left');
-
-// Rank badge on the right
-card.setRankPosition('right');
-
-// Rank badge in the center
-card.setRankPosition('center');
+rankCard.setProgress(0.75); // 75% complete
 ```
 
-### Show Level Up Animation
+### Progress Color
 
 ```javascript
-// Enable level-up animation when user levels up
-card.showLevelUpAnimation(true);
+// Custom progress bar color
+rankCard.setProgressColor('#ff00ff');
 
-// Disable animation
-card.showLevelUpAnimation(false);
-```
-
-### Set Custom Background
-
-```javascript
-// Gradient background
-card.setBackground({
-  type: 'gradient',
-  colors: ['#1a1a2e', '#16213e'],
-  direction: 'horizontal'
-});
-
-// Image background
-card.setBackground({
-  type: 'image',
-  value: 'https://example.com/bg.jpg',
-  opacity: 0.5
-});
-
-// Solid color
-card.setBackground({
-  type: 'color',
-  value: '#1a1a2e'
-});
-```
-
-### Apply Theme
-
-```javascript
-// Built-in themes
-card.useTheme('cyberpunk');
-card.useTheme('neon');
-card.useTheme('dark');
-card.useTheme('midnight');
-card.useTheme('ocean');
-card.useTheme('sunset');
-
-// Custom theme
-card.useTheme('my-custom-theme');
-```
-
-### Custom Tokens
-
-```javascript
-card.setTokens({
-  'card.background': '#0a0a0a',
-  'text.primary': '#ff00ff',
-  'text.secondary': '#00ffcc',
+// Using theme tokens
+rankCard.setTokens({
   'progress.fill': '#ff00ff',
-  'avatar.border': '#ff00ff',
-  'card.borderRadius': 16
+  'progress.background': 'rgba(255, 255, 255, 0.1)'
+});
+```
+
+### Progress Bar Options
+
+```javascript
+rankCard.setTokens({
+  'progress.height': 12,
+  'progress.borderRadius': 6,
+  'progress.fill': '#00ffcc',
+  'progress.background': 'rgba(255, 255, 255, 0.2)'
 });
 ```
 
@@ -214,12 +184,12 @@ card.setTokens({
 const rankCard = engine.createRankCard()
   .setUser(interaction.user)
   .setStats({
-    level: 50,
+    level: 25,
     xp: 7500,
     maxXp: 10000,
-    rank: 5
+    rank: 42
   })
-  .setTheme('cyberpunk');
+  .setTheme('dark');
 
 await rankCard.send(interaction);
 ```
@@ -229,15 +199,14 @@ await rankCard.send(interaction);
 ```javascript
 const rankCard = engine.createRankCard()
   .setUser(interaction.user)
-  .setGuild(interaction.guild)
   .setStats({
     level: 75,
-    xp: 25000,
-    maxXp: 30000,
-    rank: 3,
-    totalXp: 450000
+    xp: 8500,
+    maxXp: 10000,
+    rank: 5,
+    totalXp: 250000
   })
-  .setTheme('neon')
+  .setTheme('cyberpunk')
   .setProgressColor('#00ffcc')
   .setRankPosition('left')
   .setBackground({
@@ -247,8 +216,31 @@ const rankCard = engine.createRankCard()
   })
   .setTokens({
     'text.fontFamily': 'Montserrat',
-    'card.shadow': '0 4px 20px rgba(0, 255, 204, 0.3)'
+    'text.level.size': 48,
+    'text.xp.size': 14,
+    'progress.height': 12
   });
+
+await rankCard.send(interaction);
+```
+
+### Rank Card with Badges
+
+```javascript
+const rankCard = engine.createRankCard()
+  .setUser(interaction.user)
+  .setStats({
+    level: 50,
+    xp: 7500,
+    maxXp: 10000,
+    rank: 10
+  })
+  .setTheme('neon')
+  .setBadges([
+    { type: 'online', position: 'top-right' },
+    { type: 'verified', position: 'top-left' },
+    { type: 'boost', position: 'bottom-right' }
+  ]);
 
 await rankCard.send(interaction);
 ```
@@ -256,55 +248,30 @@ await rankCard.send(interaction);
 ### Level Up Card
 
 ```javascript
-function createLevelUpCard(user, newLevel) {
+async function createLevelUpCard(user, newLevel) {
   return engine.createRankCard()
     .setUser(user)
     .setStats({
       level: newLevel,
       xp: 0,
-      maxXp: 1000,
-      rank: null
+      maxXp: calculateMaxXp(newLevel),
+      rank: await getUserRank(user.id)
     })
     .setTheme('celebration')
     .setBackground({
       type: 'gradient',
-      colors: ['#f59e0b', '#ef4444'],
+      colors: ['#ffd700', '#ff8c00'],
       direction: 'horizontal'
     })
-    .showLevelUpAnimation(true);
+    .setTokens({
+      'text.primary': '#ffffff',
+      'progress.fill': '#ffd700'
+    });
 }
 
 // Usage
-const card = createLevelUpCard(user, 50);
-await card.send(interaction);
-```
-
-### Compare Cards (Two Users)
-
-```javascript
-async function compareRanks(interaction, user1, user2) {
-  const card1 = engine.createRankCard()
-    .setUser(user1)
-    .setStats({ level: 75, xp: 25000, maxXp: 30000, rank: 3 })
-    .setTheme('cyberpunk');
-
-  const card2 = engine.createRankCard()
-    .setUser(user2)
-    .setStats({ level: 60, xp: 15000, maxXp: 20000, rank: 8 })
-    .setTheme('cyberpunk');
-
-  const buffer1 = await card1.toBuffer();
-  const buffer2 = await card2.toBuffer();
-
-  const { AttachmentBuilder } = require('discord.js');
-  const attachment1 = new AttachmentBuilder(buffer1, { name: 'rank1.png' });
-  const attachment2 = new AttachmentBuilder(buffer2, { name: 'rank2.png' });
-
-  await interaction.reply({
-    content: `**Rank Comparison**\n${user1.username} vs ${user2.username}`,
-    files: [attachment1, attachment2]
-  });
-}
+const levelUpCard = await createLevelUpCard(user, 50);
+await levelUpCard.send(interaction);
 ```
 
 ---
@@ -314,14 +281,12 @@ async function compareRanks(interaction, user1, user2) {
 ### Progress Bar Styles
 
 ```javascript
-// Custom progress color
-card.setProgressColor('#ff00ff');
-
-// Custom progress background
 card.setTokens({
-  'progress.background': 'rgba(255, 255, 255, 0.1)',
-  'progress.height': 12,
-  'progress.borderRadius': 6
+  'progress.height': 10,
+  'progress.borderRadius': 5,
+  'progress.fill': '#00ffcc',
+  'progress.background': 'rgba(255, 255, 255, 0.15)',
+  'progress.glow': true
 });
 ```
 
@@ -329,10 +294,10 @@ card.setTokens({
 
 ```javascript
 card.setTokens({
-  'avatar.size': 80,
+  'avatar.size': 100,
   'avatar.border': '#00ffcc',
   'avatar.borderWidth': 4,
-  'avatar.shape': 'circle' // 'circle', 'square', 'rounded'
+  'avatar.shape': 'circle'
 });
 ```
 
@@ -341,11 +306,13 @@ card.setTokens({
 ```javascript
 card.setTokens({
   'text.fontFamily': 'Montserrat',
-  'text.fontSize': 16,
-  'text.fontWeight': 600,
+  'text.level.size': 32,
+  'text.level.weight': 700,
+  'text.xp.size': 14,
+  'text.xp.weight': 400,
+  'text.rank.size': 16,
   'text.primary': '#ffffff',
-  'text.secondary': '#b3b3b3',
-  'text.muted': '#666666'
+  'text.secondary': '#b3b3b3'
 });
 ```
 
@@ -353,11 +320,10 @@ card.setTokens({
 
 ```javascript
 card.setTokens({
-  'card.width': 800,
-  'card.height': 250,
+  'card.width': 600,
+  'card.height': 200,
   'card.background': '#1a1a2e',
   'card.borderRadius': 16,
-  'card.shadow': '0 4px 6px rgba(0, 0, 0, 0.3)',
   'card.padding': 20
 });
 ```
@@ -375,6 +341,6 @@ card.setTokens({
 
 ![Terms](assets/@modularterms.png)
 
-*Create beautiful rank cards*
+*Track your progress*
 
 </div>

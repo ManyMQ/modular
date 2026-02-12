@@ -1,5 +1,13 @@
 # Invite Cards
 
+<div align="center">
+
+**Track server invite statistics**
+
+[![Invite Cards](https://img.shields.io/npm/dw/modular?style=flat-square&logo=users)](invite-cards.md)
+
+</div>
+
 Invite cards display server invite statistics and track member invites. They show who invited the most members and track invite trends over time.
 
 <div align="center">
