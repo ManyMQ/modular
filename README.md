@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Modular Banner](docs/assets/@modularbanner.png)
+![Modular Banner](docs/assets/@modulartransparent.png)
 
 **Production-grade Node.js canvas rendering engine for Discord cards**
 
@@ -15,7 +15,7 @@
 
 <div align="center">
 
-![Dark Theme Preview](docs/assets/@modulardark.png)
+![Dark Theme](docs/assets/@modulardark_transparent.png)
 
 *Create stunning cards with built-in themes*
 
@@ -228,17 +228,9 @@ Modular comes with several built-in themes ready to use:
 
 <div align="center">
 
-![Light Theme](docs/assets/@modularlight.png)
+![Light Theme](docs/assets/@modularlight_transparent.png)
 
 *Light theme option*
-
-</div>
-
-<div align="center">
-
-![Dark Theme](docs/assets/@modulardark.png)
-
-*Dark theme option*
 
 </div>
 

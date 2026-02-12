@@ -4,7 +4,7 @@ Invite cards display user invite statistics and tracking information. Perfect fo
 
 <div align="center">
 
-![Invite Card Preview](assets/@modulardark.png)
+![Invite Card Preview](assets/@modulardark_transparent.png)
 
 *Track server invites beautifully*
 
@@ -82,7 +82,7 @@ interface InviteStats {
   regular: number;    // Regular invites
   fake: number;       // Fake invites
   leaves: number;     // Left invites
-;      // Bonus  bonus: number invites
+  bonus: number;      // Bonus invites
 }
 ```
 

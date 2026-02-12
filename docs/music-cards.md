@@ -4,7 +4,7 @@ Music cards display current playing track information with progress visualizatio
 
 <div align="center">
 
-![Music Card Preview](assets/@modularlight.png)
+![Music Card Preview](assets/@modularlight_transparent.png)
 
 *Beautiful music player cards*
 

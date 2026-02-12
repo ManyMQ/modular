@@ -4,7 +4,7 @@ Leaderboard cards display server rankings and leaderboards. They can show the to
 
 <div align="center">
 
-![Leaderboard Preview](assets/@modulardark.png)
+![Leaderboard Preview](assets/@modulardark_transparent.png)
 
 *Beautiful server leaderboards*
 
@@ -37,8 +37,8 @@ Leaderboard cards display ranked lists of users, commonly used for:
 
 ### Creating a Leaderboard Card
 
- { createEngine }```javascript
-const = require('modular');
+```javascript
+const { createEngine } = require('modular');
 
 const engine = createEngine();
 
@@ -71,11 +71,11 @@ await leaderboardCard.send(interaction);
 
 ---
 
-## Entries Entry
+## Entries Configuration
 
-```typescript Configuration
+### Basic Entry
 
-### Basic
+```typescript
 interface LeaderboardEntry {
   rank: number;        // Position (1, 2, 3, etc.)
   user: Discord.User;  // User object

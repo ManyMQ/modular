@@ -4,7 +4,7 @@ Rank cards display user level, XP progress, and rank information. They are one o
 
 <div align="center">
 
-![Rank Card Preview](assets/@modulardark.png)
+![Rank Card Preview](assets/@modulardark_transparent.png)
 
 *Stunning rank cards with built-in themes*
 

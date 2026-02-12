@@ -93,7 +93,7 @@ Let's create your first card step by step.
 
 <div align="center">
 
-![First Card](assets/@modulardark.png)
+![First Card](assets/@modulardark_transparent.png)
 
 *Create stunning rank cards*
 
@@ -279,7 +279,7 @@ await welcomeCard.send(interaction);
 
 <div align="center">
 
-![Themes](assets/@modularlight.png)
+![Themes](assets/@modularlight_transparent.png)
 
 *Multiple theme options available*
 

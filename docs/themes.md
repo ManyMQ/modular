@@ -4,7 +4,7 @@ Modular's theme system provides a powerful way to customize the appearance of yo
 
 <div align="center">
 
-![Dark Theme](assets/@modulardark.png)
+![Dark Theme](assets/@modulardark_transparent.png)
 
 *Dark theme preview*
 
@@ -46,7 +46,7 @@ Modular includes several professionally designed built-in themes:
 
 <div align="center">
 
-![Light Theme](assets/@modularlight.png)
+![Light Theme](assets/@modularlight_transparent.png)
 
 *Light theme - Clean and minimal*
 
@@ -127,14 +127,6 @@ Minimalist light theme for bright environments.
 ```javascript
 card.useTheme('light');
 ```
-
-<div align="center">
-
-![Light Theme Banner](assets/@modularlight_banner.png)
-
-*Light theme banner*
-
-</div>
 
 **Color Palette:**
 - Background: `#ffffff`
