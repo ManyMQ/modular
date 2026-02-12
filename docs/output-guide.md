@@ -2,6 +2,14 @@
 
 This guide explains how to get output from Modular cards - whether sending to Discord, saving to files, or using in other contexts.
 
+<div align="center">
+
+![Output Guide](assets/@modulardocumentation.png)
+
+*Multiple output options available*
+
+</div>
+
 ## Table of Contents
 
 - [Output Methods](#output-methods)
@@ -474,3 +482,11 @@ try {
 - [Getting Started](getting-started.md)
 - [API Reference](api-reference.md)
 - [Discord.js Integration](getting-started.md#discordjs-integration)
+
+<div align="center">
+
+![Terms](assets/@modularterms.png)
+
+*Output your cards anywhere*
+
+</div>

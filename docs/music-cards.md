@@ -2,6 +2,14 @@
 
 Music cards display current playing track information with progress visualization. Perfect for music bots and servers with music features.
 
+<div align="center">
+
+![Music Card Preview](assets/@modularlight.png)
+
+*Beautiful music player cards*
+
+</div>
+
 ## Table of Contents
 
 - [Overview](#overview)
@@ -97,7 +105,7 @@ interface ExtendedTrackInfo {
   duration: number;
   position: number;
   volume?: number;        // 0-100
-  isPlaying?: boolean;    // Playing or paused
+  isPlaying?: boolean;     // Playing or paused
   repeat?: 'none' | 'one' | 'all';
   shuffle?: boolean;
   metadata?: Record<string, any>;
@@ -353,3 +361,11 @@ card.setTokens({
 - [Theme System](themes.md)
 - [Token System](api-reference.md#token-system)
 - [Output Guide](output-guide.md)
+
+<div align="center">
+
+![Terms](assets/@modularterms.png)
+
+*Show what's playing*
+
+</div>

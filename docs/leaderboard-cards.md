@@ -2,6 +2,14 @@
 
 Leaderboard cards display server rankings and leaderboards. They can show the top users in various categories like XP, levels, or custom metrics.
 
+<div align="center">
+
+![Leaderboard Preview](assets/@modulardark.png)
+
+*Beautiful server leaderboards*
+
+</div>
+
 ## Table of Contents
 
 - [Overview](#overview)
@@ -29,8 +37,8 @@ Leaderboard cards display ranked lists of users, commonly used for:
 
 ### Creating a Leaderboard Card
 
-```javascript
-const { createEngine } = require('modular');
+ { createEngine }```javascript
+const = require('modular');
 
 const engine = createEngine();
 
@@ -63,11 +71,11 @@ await leaderboardCard.send(interaction);
 
 ---
 
-## Entries Configuration
+## Entries Entry
 
-### Basic Entry
+```typescript Configuration
 
-```typescript
+### Basic
 interface LeaderboardEntry {
   rank: number;        // Position (1, 2, 3, etc.)
   user: Discord.User;  // User object
@@ -337,3 +345,11 @@ card.setTokens({
 - [Theme System](themes.md)
 - [Token System](api-reference.md#token-system)
 - [Output Guide](output-guide.md)
+
+<div align="center">
+
+![Terms](assets/@modularterms.png)
+
+*Rank your server members*
+
+</div>

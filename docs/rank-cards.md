@@ -2,6 +2,14 @@
 
 Rank cards display user level, XP progress, and rank information. They are one of the most commonly used card types in Discord bots.
 
+<div align="center">
+
+![Rank Card Preview](assets/@modulardark.png)
+
+*Stunning rank cards with built-in themes*
+
+</div>
+
 ## Table of Contents
 
 - [Overview](#overview)
@@ -87,7 +95,7 @@ interface ExtendedRankStats {
   maxXp: number;
   rank?: number;
   totalXp?: number;    // Total lifetime XP
-  previousXp?: number; // XP at last level
+  previousXp?: number;  // XP at last level
   nextLevelXp?: number; // XP needed for next level
 }
 ```
@@ -362,3 +370,11 @@ card.setTokens({
 - [Theme System](themes.md)
 - [Token System](api-reference.md#token-system)
 - [Output Guide](output-guide.md)
+
+<div align="center">
+
+![Terms](assets/@modularterms.png)
+
+*Create beautiful rank cards*
+
+</div>

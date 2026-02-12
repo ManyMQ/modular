@@ -2,6 +2,14 @@
 
 Invite cards display user invite statistics and tracking information. Perfect for servers that track member referrals and invitations.
 
+<div align="center">
+
+![Invite Card Preview](assets/@modulardark.png)
+
+*Track server invites beautifully*
+
+</div>
+
 ## Table of Contents
 
 - [Overview](#overview)
@@ -74,7 +82,7 @@ interface InviteStats {
   regular: number;    // Regular invites
   fake: number;       // Fake invites
   leaves: number;     // Left invites
-  bonus: number;      // Bonus invites
+;      // Bonus  bonus: number invites
 }
 ```
 
@@ -305,3 +313,11 @@ card.setTokens({
 - [Theme System](themes.md)
 - [Token System](api-reference.md#token-system)
 - [Output Guide](output-guide.md)
+
+<div align="center">
+
+![Terms](assets/@modularterms.png)
+
+*Track invites with style*
+
+</div>

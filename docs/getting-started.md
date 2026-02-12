@@ -2,6 +2,14 @@
 
 Welcome to Modular! This guide will help you get started with our production-grade Node.js canvas rendering engine for Discord cards.
 
+<div align="center">
+
+![Installation](assets/@modularinstallation.png)
+
+*Easy installation with npm*
+
+</div>
+
 ## Table of Contents
 
 - [📦 Installation](#-installation)
@@ -44,6 +52,14 @@ const { createEngine } = require('modular');
 console.log('Modular version:', require('modular/package.json').version);
 ```
 
+<div align="center">
+
+![Quick Start](assets/@modulardocumentation.png)
+
+*Comprehensive documentation available*
+
+</div>
+
 ---
 
 ## 🛠️ Prerequisites
@@ -75,6 +91,14 @@ node --version
 
 Let's create your first card step by step.
 
+<div align="center">
+
+![First Card](assets/@modulardark.png)
+
+*Create stunning rank cards*
+
+</div>
+
 ### Step 1: Initialize the Engine
 
 ```javascript
@@ -87,7 +111,7 @@ const engine = createEngine();
 const engine = createEngine({
   dpi: 2,                  // Render quality (1-4)
   cache: { maxSize: 100 }, // Asset cache size
-  debug: false             // Enable debug logging
+  debug: false            // Enable debug logging
 });
 ```
 
@@ -252,6 +276,14 @@ await welcomeCard.send(interaction);
 ## 🎨 Customizing with Themes
 
 ### Using Built-in Themes
+
+<div align="center">
+
+![Themes](assets/@modularlight.png)
+
+*Multiple theme options available*
+
+</div>
 
 ```javascript
 // Apply a built-in theme
@@ -663,4 +695,10 @@ try {
 - 🔌 Learn about the [Plugin System](api-reference.md#plugin-system)
 - ⚡ Check out [Performance Tips](api-reference.md#performance-apis)
 
+<div align="center">
+
+![Terms](assets/@modularterms.png)
+
 **Happy coding! 🎉**
+
+</div>

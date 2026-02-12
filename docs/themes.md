@@ -2,6 +2,14 @@
 
 Modular's theme system provides a powerful way to customize the appearance of your cards. Themes allow you to maintain consistent styling across all cards while providing flexibility for customization.
 
+<div align="center">
+
+![Dark Theme](assets/@modulardark.png)
+
+*Dark theme preview*
+
+</div>
+
 ## Table of Contents
 
 - [Overview](#overview)
@@ -35,6 +43,14 @@ Themes can be:
 ## Built-in Themes
 
 Modular includes several professionally designed built-in themes:
+
+<div align="center">
+
+![Light Theme](assets/@modularlight.png)
+
+*Light theme - Clean and minimal*
+
+</div>
 
 ### cyberpunk
 
@@ -111,6 +127,14 @@ Minimalist light theme for bright environments.
 ```javascript
 card.useTheme('light');
 ```
+
+<div align="center">
+
+![Light Theme Banner](assets/@modularlight_banner.png)
+
+*Light theme banner*
+
+</div>
 
 **Color Palette:**
 - Background: `#ffffff`
@@ -673,3 +697,11 @@ const myTheme = { /* ... */ };
 - [Getting Started](getting-started.md)
 - [API Reference](api-reference.md)
 - [Token System](api-reference.md#token-system)
+
+<div align="center">
+
+![Terms](assets/@modularterms.png)
+
+*Professional documentation for professional tools*
+
+</div>

@@ -13,6 +13,14 @@
 
 </div>
 
+<div align="center">
+
+![Dark Theme Preview](docs/assets/@modulardark.png)
+
+*Create stunning cards with built-in themes*
+
+</div>
+
 ---
 
 ## 📋 Table of Contents
@@ -71,6 +79,14 @@ yarn add modular
 pnpm add modular
 ```
 
+<div align="center">
+
+![Installation Guide](docs/assets/@modularinstallation.png)
+
+*Simple npm installation*
+
+</div>
+
 ### Basic Usage
 
 ```javascript
@@ -122,6 +138,14 @@ client.login('YOUR_TOKEN');
 
 For full documentation, visit our [Documentation Portal](docs/getting-started.md).
 
+<div align="center">
+
+![Documentation](docs/assets/@modulardocumentation.png)
+
+*Comprehensive documentation*
+
+</div>
+
 ### Getting Started
 
 New to Modular? Start with our [Getting Started Guide](docs/getting-started.md) to learn the basics.
@@ -131,7 +155,7 @@ New to Modular? Start with our [Getting Started Guide](docs/getting-started.md) 
 - [Installation Guide](docs/getting-started.md#installation)
 - [Creating Your First Card](docs/getting-started.md#card-creation)
 - [Theme Customization](docs/themes.md)
-- [Plugin Development](docs/plugins.md)
+- [Plugin Development](docs/api-reference.md#plugin-system)
 
 ### API Reference
 
@@ -201,6 +225,22 @@ await musicCard.send(interaction);
 ## 🎨 Themes
 
 Modular comes with several built-in themes ready to use:
+
+<div align="center">
+
+![Light Theme](docs/assets/@modularlight.png)
+
+*Light theme option*
+
+</div>
+
+<div align="center">
+
+![Dark Theme](docs/assets/@modulardark.png)
+
+*Dark theme option*
+
+</div>
 
 ### Built-in Themes
 
@@ -658,6 +698,8 @@ SOFTWARE.
 ---
 
 <div align="center">
+
+![Terms](docs/assets/@modularterms.png)
 
 **Built with ❤️ by the Modular Team**
 
