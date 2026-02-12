@@ -1,4 +1,4 @@
-# <div align="center"><img src="docs/assets/modularlight_transparent.png" alt="Modular" width="400"/></div>
+# <div align="center"><img src="docs/assets/modularlight_banner_transparent.png" alt="Modular" width="400"/></div>
 
 <div align="center">
 
