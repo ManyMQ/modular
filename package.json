@@ -23,9 +23,6 @@
   "author": "Modular Team",
   "license": "MIT",
   "scripts": {
-    "test": "node test/runner.js",
-    "test:unit": "node test/runner.js --unit",
-    "test:core": "node test/runner.js --core",
     "lint": "eslint src/"
   },
   "dependencies": {
@@ -36,11 +33,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/modular/modular"
+    "url": "https://github.com/manymq/modular"
   },
   "bugs": {
-    "url": "https://github.com/modular/modular/issues"
+    "url": "https://github.com/manymq/modular/issues"
   },
-  "homepage": "https://github.com/modular/modular#readme",
+  "homepage": "https://github.com/manymq/modular#readme",
   "enginesStrict": true
 }
