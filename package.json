@@ -1,0 +1,46 @@
+{
+  "name": "modular",
+  "version": "2.0.0",
+  "description": "Production-grade Node.js canvas rendering engine for Discord cards",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "discord",
+    "canvas",
+    "card",
+    "renderer",
+    "customizable",
+    "engine",
+    "rank",
+    "profile",
+    "leaderboard",
+    "music",
+    "invite"
+  ],
+  "author": "Modular Team",
+  "license": "MIT",
+  "scripts": {
+    "test": "node test/runner.js",
+    "test:unit": "node test/runner.js --unit",
+    "test:core": "node test/runner.js --core",
+    "lint": "eslint src/"
+  },
+  "dependencies": {
+    "@napi-rs/canvas": "^0.1.65"
+  },
+  "devDependencies": {
+    "eslint": "^8.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/modular/modular"
+  },
+  "bugs": {
+    "url": "https://github.com/modular/modular/issues"
+  },
+  "homepage": "https://github.com/modular/modular#readme",
+  "enginesStrict": true
+}
