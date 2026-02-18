@@ -15,26 +15,26 @@
 'use strict';
 
 const EventEmitter = require('events');
-const { CanvasRenderer } = require('../renderer/CanvasRenderer');
-const { AssetLoader } = require('../renderer/AssetLoader');
-const { BufferManager } = require('../renderer/BufferManager');
-const { LayoutParser } = require('../layout/LayoutParser');
-const { LayoutResolver } = require('../layout/LayoutResolver');
-const { StyleEngine } = require('../styling/StyleEngine');
-const { TokenEngine } = require('../styling/TokenEngine');
-const { ThemeManager } = require('../themes/ThemeManager');
-const { PluginManager } = require('../plugins/PluginManager');
-const { ComponentRegistry } = require('../components/base/BaseComponent');
-const { LRUCache } = require('../cache/LRUCache');
+const { CanvasRenderer } = require('../canvas/engine/CanvasRenderer');
+const { AssetLoader } = require('../canvas/engine/AssetLoader');
+const { BufferManager } = require('../canvas/engine/BufferManager');
+const { CardRenderer } = require('../canvas/components/CardRenderer');
+const { TextComponent } = require('../canvas/components/TextComponent');
+const { AvatarComponent } = require('../canvas/components/AvatarComponent');
+const { ProgressComponent } = require('../canvas/components/ProgressComponent');
+const { MediaComponent } = require('../canvas/components/MediaComponent');
+const { ContainerComponent } = require('../canvas/components/ContainerComponent');
+const { LayoutParser } = require('../canvas/layout/LayoutParser');
+const { LayoutResolver } = require('../canvas/layout/LayoutResolver');
+const { StyleEngine } = require('../canvas/styling/StyleEngine');
+const { TokenEngine } = require('../canvas/styling/TokenEngine');
+const { ThemeManager } = require('../canvas/themes/ThemeManager');
+const { PluginManager } = require('./plugins/PluginManager');
+const { ComponentRegistry } = require('../canvas/components/BaseComponent');
+const { LRUCache } = require('./cache/LRUCache');
 const CardBuilder = require('./CardBuilder');
 
-// Builders
-const RankCardBuilder = require('../builders/RankCardBuilder');
-const MusicCardBuilder = require('../builders/MusicCardBuilder');
-const LeaderboardCardBuilder = require('../builders/LeaderboardCardBuilder');
-const InviteCardBuilder = require('../builders/InviteCardBuilder');
-const ProfileCardBuilder = require('../builders/ProfileCardBuilder');
-const WelcomeCardBuilder = require('../builders/WelcomeCardBuilder');
+// Builders are loaded lazily in factory methods to prevent circular dependencies
 
 /**
  * Engine - Production-grade Node.js canvas rendering engine
@@ -50,7 +50,7 @@ class Engine extends EventEmitter {
    */
   constructor(options = {}) {
     super();
-    
+
     this.options = options;
     this.config = {
       dpi: options.dpi || 2,
@@ -63,16 +63,22 @@ class Engine extends EventEmitter {
     this.assetLoader = new AssetLoader(this.cache);
     this.bufferManager = new BufferManager();
     this.renderer = new CanvasRenderer(this.config);
-    
+
     this.layoutParser = new LayoutParser();
     this.layoutResolver = new LayoutResolver();
-    
+
     this.tokenEngine = new TokenEngine();
     this.styleEngine = new StyleEngine(this.tokenEngine);
-    
+
     this.themeManager = new ThemeManager();
+    const { registerDefaultThemes } = require('../canvas/themes/index');
+    registerDefaultThemes(this.themeManager);
+
     this.pluginManager = new PluginManager(this);
     this.componentRegistry = new ComponentRegistry();
+
+    // Register core components
+    this.registerComponents();
 
     // Render pipeline hooks
     this.hooks = {
@@ -97,6 +103,36 @@ class Engine extends EventEmitter {
     this.renderer.on('render:error', (err) => this.emit('render:error', err));
   }
 
+  /**
+   * Register default components
+   * @private
+   */
+  registerComponents() {
+    // UI Components
+    this.componentRegistry.register('text', TextComponent);
+    this.componentRegistry.register('avatar', AvatarComponent);
+    this.componentRegistry.register('progress', ProgressComponent);
+    this.componentRegistry.register('media', MediaComponent);
+    this.componentRegistry.register('image', MediaComponent); // Alias
+    this.componentRegistry.register('album-art', MediaComponent); // Alias
+    this.componentRegistry.register('banner', MediaComponent); // Alias
+    this.componentRegistry.register('container', ContainerComponent);
+    this.componentRegistry.register('box', ContainerComponent); // Alias
+    this.componentRegistry.register('level-box', ContainerComponent); // Alias
+    this.componentRegistry.register('stat-box', ContainerComponent); // Alias
+
+    // Card Controllers
+    this.componentRegistry.register('rank-card', CardRenderer);
+    this.componentRegistry.register('music-card', CardRenderer);
+    this.componentRegistry.register('leaderboard-card', CardRenderer);
+    this.componentRegistry.register('invite-card', CardRenderer);
+    this.componentRegistry.register('profile-card', CardRenderer);
+    this.componentRegistry.register('welcome-card', CardRenderer);
+
+    // Legacy/Generic aliases
+    this.componentRegistry.register('card', CardRenderer);
+  }
+
   // ==================== Builder Factory Methods ====================
 
   /**
@@ -112,6 +148,7 @@ class Engine extends EventEmitter {
    * @returns {RankCardBuilder}
    */
   createRankCard() {
+    const RankCardBuilder = require('./RankCardBuilder');
     return new RankCardBuilder(this);
   }
 
@@ -120,6 +157,7 @@ class Engine extends EventEmitter {
    * @returns {MusicCardBuilder}
    */
   createMusicCard() {
+    const MusicCardBuilder = require('./MusicCardBuilder');
     return new MusicCardBuilder(this);
   }
 
@@ -128,6 +166,7 @@ class Engine extends EventEmitter {
    * @returns {LeaderboardCardBuilder}
    */
   createLeaderboardCard() {
+    const LeaderboardCardBuilder = require('./LeaderboardCardBuilder');
     return new LeaderboardCardBuilder(this);
   }
 
@@ -136,6 +175,7 @@ class Engine extends EventEmitter {
    * @returns {InviteCardBuilder}
    */
   createInviteCard() {
+    const InviteCardBuilder = require('./InviteCardBuilder');
     return new InviteCardBuilder(this);
   }
 
@@ -144,6 +184,7 @@ class Engine extends EventEmitter {
    * @returns {ProfileCardBuilder}
    */
   createProfileCard() {
+    const ProfileCardBuilder = require('./ProfileCardBuilder');
     return new ProfileCardBuilder(this);
   }
 
@@ -152,6 +193,7 @@ class Engine extends EventEmitter {
    * @returns {WelcomeCardBuilder}
    */
   createWelcomeCard() {
+    const WelcomeCardBuilder = require('./WelcomeCardBuilder');
     return new WelcomeCardBuilder(this);
   }
 
@@ -328,7 +370,7 @@ class Engine extends EventEmitter {
    */
   getCacheStats() {
     return {
-      size: this.cache.size(),
+      size: this.cache.size,
       maxSize: this.cache.maxSize
     };
   }
@@ -373,4 +415,14 @@ class Engine extends EventEmitter {
   }
 }
 
-module.exports = { Engine };
+/**
+ * Factory function to create a new Engine instance
+ * @param {Object} options 
+ * @returns {Engine}
+ */
+function createEngine(options = {}) {
+  return new Engine(options);
+}
+
+module.exports = { Engine, createEngine };
+

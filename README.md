@@ -1,225 +1,51 @@
-# <div align="center"><img src="docs/assets/modularlight_transparent.png" alt="Modular" width="400"/></div>
+# @osn/modular
 
-<div align="center">
+A production-grade, high-performance canvas rendering engine for Discord cards. Built with Node.js and explicitly designed for scalability, customizability, and professional developer experience.
 
-**A powerful, flexible, and themeable card generation library for Discord bots**
+![Documentation Header](./docs/assets/@modulardocumentation.png)
 
-[![Discord Server](https://img.shields.io/discord/1234567890?style=flat-square&logo=discord&label=Discord)](https://discord.gg/example)
-[![npm version](https://img.shields.io/npm/v/@modular.dev/modular?style=flat-square&logo=npm)](https://npmjs.com/package/@modular.dev/modular)
-[![npm downloads](https://img.shields.io/npm/dw/@modular.dev/modular?style=flat-square&logo=npm)](https://npmjs.com/package/@modular.dev/modular)
-[![License](https://img.shields.io/github/license/example/modular?style=flat-square)](LICENSE)
-[![Stars](https://img.shields.io/github/stars/example/modular?style=flat-square)](https://github.com/example/modular/stargazers)
-
-</div>
-
-## 📋 Table of Contents
-
-- [✨ Features](#-features)
-- [🚀 Quick Start](#-quick-start)
-- [📖 Documentation](#-documentation)
-- [🎨 Themes](#-themes)
-- [💻 Examples](#-examples)
-- [🤝 Contributing](#-contributing)
-- [📝 License](#-license)
-
----
-
-## ✨ Features
-
-<div align="center">
-
-| Feature | Description |
-|---------|-------------|
-| 🎨 **Themeable** | Multiple built-in themes with full customization |
-| 🃏 **Card Types** | Profile, Rank, Level, Welcome, Leaderboard, Music, and more |
-| ⚡ **Fast & Lightweight** | Optimized rendering pipeline |
-| 🔌 **Plugin System** | Extend functionality with plugins |
-| 🎯 **TypeScript Ready** | Full type definitions included |
-| 🌙 **Dark/Light Modes** | Automatic theme detection |
-
-</div>
-
----
-
-## 🚀 Quick Start
-
-### Installation
+## 🚀 The 2-Minute Quick Start
 
 ```bash
-# npm
-npm install @modular.dev/modular
-
-# yarn
-yarn add @modular.dev/modular
-
-# pnpm
-pnpm add @modular.dev/modular
+npm install @osn/modular
 ```
-
-### Basic Usage
 
 ```javascript
-const { createEngine } = require('@modular.dev/modular');
-const engine = createEngine();
+import { RankCard } from '@osn/modular';
 
-// Create a profile card
-const card = engine.createProfileCard()
-  .setUser(user)
-  .setBackground('https://example.com/bg.jpg')
-  .setTheme('dark');
-
-await card.send(interaction);
+const buffer = await new RankCard()
+    .setUsername('Senior Developer')
+    .setAvatar('https://github.com/manymq.png')
+    .setTheme('neon-tech')
+    .render();
 ```
 
-### From Setup to Send
+## 📖 Comprehensive Documentation
 
-```javascript
-const { createEngine } = require('@modular.dev/modular');
-const engine = createEngine({
-  defaultTheme: 'neon',
-  cache: {
-    enabled: true,
-    maxSize: 500
-  }
-});
+### 🏁 Getting Started
+- **[Installation Guide](./docs/getting-started/installation.md)**: Prerequisites and native setup.
+- **[First Card Walkthrough](./docs/getting-started/first-card.md)**: Detailed breakdown of the builder API.
 
-// Create and send a rank card
-const rankCard = engine.createRankCard()
-  .setUser(interaction.user)
-  .setXP({ current: 7500, next: 10000, percentage: 75 })
-  .setLevel(15)
-  .setRank(42);
+### 🧠 Core Architecture
+- **[The Theme System](./docs/core-concepts/themes.md)**: Understanding tokens, effects, and branding.
+- **[The Render Pipeline](./docs/core-concepts/render-pipeline.md)**: A deep dive into the 9 rendering stages.
+- **[Card Builders](./docs/core-concepts/builders.md)**: Why and how to use specialized builders.
 
-await rankCard.send(interaction);
-```
+### 🛠️ Production Guides
+- **[Performance & Optimization](./docs/guides/performance.md)**: Memory management, workers, and scaling.
+- **[Custom Theme Creation](./docs/guides/creating-custom-theme.md)**: Building your brand in code.
+- **[Design System Mapping](./docs/design-system/assets-mapping.md)**: Bridge the gap between Figma and Canvas.
 
----
+### 📑 API Reference
+- **[CardBuilder API](./docs/api/card-builder.md)**: Exhaustive method reference.
+- **[Theme engine API](./docs/api/theme-engine.md)**: Registration and token handling.
+- **[Render Engine API](./docs/api/render-engine.md)**: Low-level canvas control.
 
-## 📖 Documentation
+## 🖼️ Examples
+Explore a wide range of use cases from **[basic rank cards](./examples/basic/rank-basic.js)** to **[advanced custom layouts](./examples/advanced/custom-layout.js)**. See the **[full examples overview](./docs/examples/examples-overview.md)** for more.
 
-<div align="center">
+## ❤️ Contributing
+We welcome contributions! Please see our architecture guide before submitting a PR.
 
-| Section | Description |
-|---------|-------------|
-| [Getting Started](docs/getting-started.md) | Installation, setup, and basic usage |
-| [API Reference](docs/api-reference.md) | Complete API documentation |
-| [Themes](docs/themes.md) | Theme customization guide |
-| [Output Guide](docs/output-guide.md) | Export and deployment options |
-
-</div>
-
----
-
-## 🎨 Themes
-
-Modular comes with multiple stunning themes out of the box:
-
-<div align="center">
-
-| Theme | Preview |
-|-------|---------|
-| 🌙 **Dark** | Classic dark theme |
-| ✨ **Neon** | Cyberpunk neon aesthetics |
-| 🌊 **Ocean** | Blue ocean vibes |
-| 🌸 **Sakura** | Cherry blossom theme |
-| 🔥 **Fire** | Fiery red theme |
-| 💜 **Midnight** | Deep purple midnight |
-
-</div>
-
-### Using Themes
-
-```javascript
-// Built-in themes
-card.setTheme('neon');
-
-// Custom theme
-card.setTheme({
-  name: 'custom',
-  background: '#1a1a2e',
-  primary: '#00ffcc',
-  secondary: '#ff00ff'
-});
-```
-
----
-
-## 💻 Examples
-
-### Profile Card
-
-```javascript
-const card = engine.createProfileCard()
-  .setUser(user)
-  .setAvatar(user.displayAvatarURL({ size: 256 }))
-  .setUsername(user.username)
-  .setDiscriminator(user.discriminator)
-  .setBackground('https://example.com/bg.jpg')
-  .setTheme('neon')
-  .setStats({
-    level: 25,
-    xp: 12500,
-    rank: 150
-  });
-
-await card.send(interaction);
-```
-
-### Rank Card
-
-```javascript
-const rankCard = engine.createRankCard()
-  .setUser(interaction.user)
-  .setLevel(42)
-  .setRank(5)
-  .setXP({ current: 8500, next: 10000, percentage: 85 })
-  .setTheme('dark')
-  .addBadge({ type: 'online', position: 'top-right' });
-
-await rankCard.send(interaction);
-```
-
-### Leaderboard Card
-
-```javascript
-const leaderboard = engine.createLeaderboardCard()
-  .setGuild(interaction.guild)
-  .setEntries(topUsers.map((user, i) => ({
-    rank: i + 1,
-    user: user,
-    xp: user.xp,
-    level: user.level
-  })))
-  .setTheme('midnight');
-
-await leaderboard.send(interaction);
-```
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
----
-
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-<div align="center">
-
-**Made with ❤️ by the Modular Team**
-
-[![Follow on GitHub](https://img.shields.io/github/followers/example?style=flat-square&logo=github)](https://github.com/example)
-[![Follow on Twitter](https://img.shields.io/twitter/follow/example?style=flat-square&logo=twitter)](https://twitter.com/example)
-
-</div>
+## 📜 License
+MIT

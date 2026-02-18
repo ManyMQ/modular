@@ -1,9 +1,21 @@
 {
-  "name": "@modular.dev/modular",
-  "version": "2.0.0",
-  "description": "Production-grade Node.js canvas rendering engine for Discord cards",
-  "main": "index.js",
-  "types": "index.d.ts",
+  "name": "@osn/modular",
+  "version": "2.1.0",
+  "description": "High-performance, designer-aligned Discord card generation engine for Node.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "engines": {
     "node": ">=18.0.0"
   },
@@ -11,25 +23,33 @@
     "discord",
     "canvas",
     "card",
+    "image",
+    "bot",
+    "theme",
+    "modular",
     "renderer",
-    "customizable",
-    "engine",
-    "rank",
-    "profile",
-    "leaderboard",
-    "music",
-    "invite"
+    "@osn"
   ],
-  "author": "Modular Team",
+  "author": "Open Source Network",
   "license": "MIT",
   "scripts": {
-    "lint": "eslint src/"
+    "build": "tsc",
+    "prepublishOnly": "npm run build",
+    "lint": "eslint src/",
+    "validate": "node scripts/validate-themes.js",
+    "smoke": "node scripts/smoke-test.js"
   },
+  "sideEffects": false,
   "dependencies": {
     "@napi-rs/canvas": "^0.1.65"
   },
   "devDependencies": {
-    "eslint": "^8.0.0"
+    "@types/node": "^20.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.55.0",
+    "@typescript-eslint/parser": "^8.55.0",
+    "discord.js": "^14.14.0",
+    "eslint": "^8.0.0",
+    "typescript": "^5.0.0"
   },
   "repository": {
     "type": "git",

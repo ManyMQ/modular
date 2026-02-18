@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Build Output (Compied files should NOT be in GitHub)
+dist/
+*.tsbuildinfo
+
+# Personal Config & Logs
+.env
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.eslintcache
+
+# macOS
+.DS_Store
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo

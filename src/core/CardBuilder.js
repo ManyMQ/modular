@@ -14,15 +14,27 @@
 
 'use strict';
 
+const { ValidationError } = require('../errors/ModularError');
+
 /**
  * CardBuilder - Provides a fluent API for building Discord cards
  */
 class CardBuilder {
   /**
-   * @param {Engine} engine - Parent engine instance
+   * @param {Engine} [engine] - Parent engine instance (optional)
    */
   constructor(engine) {
-    this.engine = engine;
+    // If no engine provided, use/create a default singleton engine for simplicity
+    if (!engine) {
+      const { createEngine } = require('./Engine');
+      // We use a global/cached default engine to avoid re-initializing fonts/themes
+      if (!global.__MODULAR_DEFAULT_ENGINE__) {
+        global.__MODULAR_DEFAULT_ENGINE__ = createEngine();
+      }
+      this.engine = global.__MODULAR_DEFAULT_ENGINE__;
+    } else {
+      this.engine = engine;
+    }
 
     this.config = {
       width: 800,
@@ -37,42 +49,83 @@ class CardBuilder {
     };
   }
 
+  /**
+   * Get string representation for debugging
+   * @returns {string}
+   */
+  toString() {
+    return `CardBuilder[${this.config.preset || 'custom'}]`;
+  }
+
+  /**
+   * Get JSON representation for debugging
+   * @returns {Object}
+   */
+  toJSON() {
+    return {
+      type: 'CardBuilder',
+      preset: this.config.preset,
+      layout: this.config.layout,
+      options: {
+        width: this.config.width,
+        height: this.config.height,
+        dpi: this.config.dpi,
+        theme: this.config.theme
+      }
+    };
+  }
+
   // ==================== Size Configuration ====================
 
   /**
    * Set card dimensions
-   * @param {number} width - Card width
-   * @param {number} height - Card height
-   * @returns {CardBuilder}
+   * @param {number} width - Card width (1-4096)
+   * @param {number} height - Card height (1-4096)
+   * @returns {CardBuilder} This builder instance for method chaining
+   * @throws {ValidationError} If dimensions are invalid
    */
   setSize(width, height) {
-    this.config.width = Number(width) || 800;
-    this.config.height = Number(height) || 400;
+    const w = Number(width);
+    const h = Number(height);
+    if (!w || w <= 0 || w > 4096) {
+      throw new ValidationError(`Invalid width: ${width}. Must be 1-4096.`, { field: 'width', value: width });
+    }
+    if (!h || h <= 0 || h > 4096) {
+      throw new ValidationError(`Invalid height: ${height}. Must be 1-4096.`, { field: 'height', value: height });
+    }
+    this.config.width = w;
+    this.config.height = h;
     return this;
   }
 
   /**
    * Set DPI scaling
-   * @param {number} dpi - DPI value
-   * @returns {CardBuilder}
+   * @param {number} dpi - DPI value (1-4)
+   * @returns {CardBuilder} This builder instance for method chaining
+   * @throws {ValidationError} If DPI is invalid
    */
   setDpi(dpi) {
-    this.config.dpi = Number(dpi) || 2;
+    const d = Number(dpi);
+    if (!d || d < 1 || d > 4) {
+      throw new ValidationError(`Invalid DPI: ${dpi}. Must be 1-4.`, { field: 'dpi', value: dpi });
+    }
+    this.config.dpi = d;
     return this;
   }
 
   /**
-   * Set card preset (rank, music, leaderboard, invite)
+   * Set card preset (rank, music, leaderboard, invite, profile, welcome)
    * @param {string} preset - Preset name
    * @param {Object} [options] - Preset options
-   * @returns {CardBuilder}
+   * @returns {CardBuilder} This builder instance for method chaining
+   * @throws {ValidationError} If preset is invalid
    */
   setPreset(preset, options = {}) {
     const validPresets = ['rank', 'music', 'leaderboard', 'invite', 'profile', 'welcome'];
     if (!validPresets.includes(preset)) {
-      throw new Error(`Invalid preset: ${preset}. Valid presets: ${validPresets.join(', ')}`);
+      throw new ValidationError(`Invalid preset: "${preset}". Valid presets: ${validPresets.join(', ')}`, { field: 'preset', value: preset, validPresets });
     }
-    
+
     this.config.preset = preset;
     this.config.layout = this._getPresetLayout(preset, options);
     return this;
@@ -105,14 +158,7 @@ class CardBuilder {
     return {
       type: 'rank-card',
       props: { ...options },
-      children: [
-        { type: 'avatar', props: { x: 20, y: 20, size: 90, slot: 'avatar' } },
-        { type: 'text', props: { x: 130, y: 45, slot: 'username', style: { fontSize: 26, fontWeight: 'bold' } } },
-        { type: 'text', props: { x: 130, y: 75, slot: 'rank', style: { fontSize: 14, color: '{accent.primary}' } } },
-        { type: 'level-box', props: { x: 620, y: 20, width: 80, height: 50, slot: 'level' } },
-        { type: 'progress', props: { x: 130, y: 130, width: 650, height: 8, slot: 'xp' } },
-        { type: 'text', props: { x: 130, y: 155, slot: 'xp-text', style: { fontSize: 10 } } }
-      ]
+      children: []
     };
   }
 
@@ -124,15 +170,7 @@ class CardBuilder {
     return {
       type: 'music-card',
       props: { ...options },
-      children: [
-        { type: 'album-art', props: { x: 20, y: 40, size: 100, slot: 'album' } },
-        { type: 'text', props: { x: 140, y: 50, slot: 'label', style: { fontSize: 11, color: '{accent.primary}' } } },
-        { type: 'text', props: { x: 140, y: 78, slot: 'title', style: { fontSize: 22, fontWeight: 'bold' } } },
-        { type: 'text', props: { x: 140, y: 105, slot: 'artist', style: { fontSize: 14 } } },
-        { type: 'progress', props: { x: 140, y: 155, width: 520, height: 6, slot: 'progress' } },
-        { type: 'text', props: { x: 140, y: 180, slot: 'time-current', style: { fontSize: 11 } } },
-        { type: 'text', props: { x: 640, y: 180, slot: 'time-total', style: { fontSize: 11 } } }
-      ]
+      children: []
     };
   }
 
@@ -144,10 +182,7 @@ class CardBuilder {
     return {
       type: 'leaderboard-card',
       props: { ...options },
-      children: [
-        { type: 'text', props: { x: 20, y: 30, slot: 'title', style: { fontSize: 20, fontWeight: 'bold' } } },
-        { type: 'text', props: { x: 20, y: 55, slot: 'subtitle', style: { fontSize: 12 } } }
-      ]
+      children: []
     };
   }
 
@@ -159,14 +194,7 @@ class CardBuilder {
     return {
       type: 'invite-card',
       props: { ...options },
-      children: [
-        { type: 'avatar', props: { x: 20, y: 20, size: 70, slot: 'avatar' } },
-        { type: 'text', props: { x: 110, y: 50, slot: 'username', style: { fontSize: 20, fontWeight: 'bold' } } },
-        { type: 'text', props: { x: 110, y: 75, slot: 'subtitle', style: { fontSize: 12 } } },
-        { type: 'stat-box', props: { x: 20, y: 120, width: 240, height: 60, slot: 'invites' } },
-        { type: 'stat-box', props: { x: 275, y: 120, width: 240, height: 60, slot: 'valid' } },
-        { type: 'stat-box', props: { x: 530, y: 120, width: 240, height: 60, slot: 'rewards' } }
-      ]
+      children: []
     };
   }
 
@@ -178,13 +206,7 @@ class CardBuilder {
     return {
       type: 'profile-card',
       props: { ...options },
-      children: [
-        { type: 'avatar', props: { x: 20, y: 20, size: 100, slot: 'avatar' } },
-        { type: 'text', props: { x: 140, y: 50, slot: 'username', style: { fontSize: 24, fontWeight: 'bold' } } },
-        { type: 'text', props: { x: 140, y: 80, slot: 'tag', style: { fontSize: 14 } } },
-        { type: 'progress', props: { x: 20, y: 150, width: 760, height: 6, slot: 'xp' } },
-        { type: 'text', props: { x: 20, y: 175, slot: 'level', style: { fontSize: 12 } } }
-      ]
+      children: []
     };
   }
 
@@ -196,21 +218,17 @@ class CardBuilder {
     return {
       type: 'welcome-card',
       props: { ...options },
-      children: [
-        { type: 'avatar', props: { x: 350, y: 30, size: 80, slot: 'avatar' } },
-        { type: 'text', props: { x: 400, y: 130, slot: 'welcome-text', style: { fontSize: 18 } } },
-        { type: 'text', props: { x: 400, y: 160, slot: 'username', style: { fontSize: 28, fontWeight: 'bold' } } },
-        { type: 'text', props: { x: 400, y: 200, slot: 'member-count', style: { fontSize: 14 } } }
-      ]
+      children: []
     };
   }
 
   // ==================== Theme Configuration ====================
 
   /**
-   * Set theme
+   * Set theme for this card
    * @param {string} themeName - Theme identifier
-   * @returns {CardBuilder}
+   * @returns {CardBuilder} This builder instance for method chaining
+   * @throws {Error} If theme name is invalid
    */
   setTheme(themeName) {
     if (!themeName || typeof themeName !== 'string') {
@@ -223,7 +241,7 @@ class CardBuilder {
   /**
    * Override theme colors for this card
    * @param {Object} colors - Color overrides
-   * @returns {CardBuilder}
+   * @returns {CardBuilder} This builder instance for method chaining
    */
   setColors(colors) {
     if (colors && typeof colors === 'object') {
@@ -256,17 +274,17 @@ class CardBuilder {
    * @param {string} user.username - Username
    * @param {string} [user.discriminator] - Discriminator
    * @param {string} [user.avatar] - Avatar hash or URL
-   * @param {string} [user.displayAvatarURL] - Method to get avatar URL
+   * @param {Function} [user.displayAvatarURL] - Method to get avatar URL
    * @param {string} [user.tag] - Full username#discriminator
    * @param {string} [user.status] - Online status
    * @param {string} [user.banner] - Banner URL
-   * @returns {CardBuilder}
+   * @returns {CardBuilder} This builder instance for method chaining
    */
   setUser(user) {
     if (!user) return this;
 
     const avatarUrl = this._getAvatarUrl(user);
-    
+
     this.setData({
       username: user.username || 'User',
       discriminator: user.discriminator || user.tag?.split('#')[1] || '0000',
@@ -276,7 +294,7 @@ class CardBuilder {
       banner: this._getBannerUrl(user),
       displayName: user.displayName || user.username
     });
-    
+
     return this;
   }
 
@@ -308,20 +326,20 @@ class CardBuilder {
    * @param {string} guild.name - Guild name
    * @param {string} [guild.icon] - Icon hash or URL
    * @param {number} [guild.memberCount] - Member count
-   * @returns {CardBuilder}
+   * @returns {CardBuilder} This builder instance for method chaining
    */
   setGuild(guild) {
     if (!guild) return this;
 
     const iconUrl = this._getGuildIconUrl(guild);
-    
+
     this.setData({
       guildName: guild.name || 'Server',
       guildIcon: iconUrl,
       memberCount: guild.memberCount,
       guildId: guild.id
     });
-    
+
     return this;
   }
 
@@ -345,7 +363,7 @@ class CardBuilder {
    * @param {number} [track.duration] - Duration in seconds
    * @param {number} [track.currentTime] - Current position in seconds
    * @param {boolean} [track.isPlaying] - Playing state
-   * @returns {CardBuilder}
+   * @returns {CardBuilder} This builder instance for method chaining
    */
   setTrack(track) {
     if (!track) return this;
@@ -359,7 +377,7 @@ class CardBuilder {
       isPlaying: track.isPlaying !== undefined ? track.isPlaying : true,
       paused: track.paused || false
     });
-    
+
     return this;
   }
 
@@ -371,14 +389,14 @@ class CardBuilder {
    * @param {number} [stats.xp] - Current XP
    * @param {number} [stats.maxXp] - XP required for next level
    * @param {number} [stats.score] - Score/points
-   * @returns {CardBuilder}
+   * @returns {CardBuilder} This builder instance for method chaining
    */
   setStats(stats) {
     if (!stats) return this;
 
     const xp = Number(stats.xp) || 0;
     const maxXp = Number(stats.maxXp) || stats.requiredXP || 1000;
-    
+
     this.setData({
       level: Number(stats.level) || 1,
       rank: Number(stats.rank) || 0,
@@ -388,7 +406,7 @@ class CardBuilder {
       score: Number(stats.score) || 0,
       requiredXP: stats.requiredXP
     });
-    
+
     return this;
   }
 
@@ -399,7 +417,7 @@ class CardBuilder {
    * @param {string} [leaderboard.subtitle] - Subtitle
    * @param {Array} leaderboard.entries - Array of entries
    * @param {string} [leaderboard.season] - Season identifier
-   * @returns {CardBuilder}
+   * @returns {CardBuilder} This builder instance for method chaining
    */
   setLeaderboard(leaderboard) {
     if (!leaderboard) return this;
@@ -410,7 +428,7 @@ class CardBuilder {
       entries: leaderboard.entries || [],
       season: leaderboard.season
     });
-    
+
     return this;
   }
 
@@ -422,7 +440,7 @@ class CardBuilder {
    * @param {number} [invite.rewards] - Rewards earned
    * @param {number} [invite.milestoneProgress] - Progress to next milestone
    * @param {number} [invite.milestoneMax] - Target for milestone
-   * @returns {CardBuilder}
+   * @returns {CardBuilder} This builder instance for method chaining
    */
   setInvite(invite) {
     if (!invite) return this;
@@ -434,14 +452,14 @@ class CardBuilder {
       milestoneProgress: Number(invite.milestoneProgress) || 0,
       milestoneMax: Number(invite.milestoneMax) || 250
     });
-    
+
     return this;
   }
 
   /**
    * Set custom data
    * @param {Object} data - Data object
-   * @returns {CardBuilder}
+   * @returns {CardBuilder} This builder instance for method chaining
    */
   setData(data) {
     if (data && typeof data === 'object') {
@@ -455,7 +473,7 @@ class CardBuilder {
   /**
    * Set layout definition
    * @param {Object} layout - Layout object or JSON DSL
-   * @returns {CardBuilder}
+   * @returns {CardBuilder} This builder instance for method chaining
    */
   setLayout(layout) {
     if (layout && typeof layout === 'object') {
@@ -468,9 +486,9 @@ class CardBuilder {
   /**
    * Add a component to the layout
    * @param {string} type - Component type
-   * @param {Object} props - Component properties
-   * @param {string} [slot] - Optional slot name
-   * @returns {CardBuilder}
+   * @param {Object} [props={}] - Component properties
+   * @param {string} [slot=null] - Optional slot name
+   * @returns {CardBuilder} This builder instance for method chaining
    */
   addComponent(type, props = {}, slot = null) {
     const component = { type, props };
@@ -511,9 +529,9 @@ class CardBuilder {
   // ==================== Token Configuration ====================
 
   /**
-   * Set design tokens
+   * Set design tokens overrides
    * @param {Object} tokens - Token definitions
-   * @returns {CardBuilder}
+   * @returns {CardBuilder} This builder instance for method chaining
    */
   setTokens(tokens) {
     if (tokens && typeof tokens === 'object') {
@@ -523,10 +541,10 @@ class CardBuilder {
   }
 
   /**
-   * Set a single design token
+   * Set a single design token override
    * @param {string} name - Token name
    * @param {*} value - Token value
-   * @returns {CardBuilder}
+   * @returns {CardBuilder} This builder instance for method chaining
    */
   setToken(name, value) {
     if (name && typeof name === 'string') {
@@ -540,8 +558,8 @@ class CardBuilder {
   /**
    * Add FX effect
    * @param {string} type - Effect type (glow|blur|shadow|gradient)
-   * @param {Object} options - Effect options
-   * @returns {CardBuilder}
+   * @param {Object} [options={}] - Effect options
+   * @returns {CardBuilder} This builder instance for method chaining
    */
   addEffect(type, options = {}) {
     if (type && typeof type === 'string') {
@@ -555,7 +573,7 @@ class CardBuilder {
    * @param {Object} background - Background configuration
    * @param {string} [background.color] - Background color
    * @param {string} [background.gradient] - Gradient start color
-   * @returns {CardBuilder}
+   * @returns {CardBuilder} This builder instance for method chaining
    */
   setBackground(background) {
     if (background && typeof background === 'object') {
@@ -569,7 +587,7 @@ class CardBuilder {
    * @param {boolean} [enabled=true]
    * @param {string} [color] - Glow color
    * @param {number} [blur] - Blur amount
-   * @returns {CardBuilder}
+   * @returns {CardBuilder} This builder instance for method chaining
    */
   setGlow(enabled = true, color = null, blur = null) {
     this.config.effects = this.config.effects.filter(e => e.type !== 'glow');
@@ -586,11 +604,11 @@ class CardBuilder {
   // ==================== Render ====================
 
   /**
-   * Render the card
+   * Render the card to a Buffer
    * @param {Object} [options] - Render options
    * @param {string} [options.format='png'] - Output format (png|jpg|webp)
    * @param {number} [options.quality=0.92] - Image quality (0-1)
-   * @returns {Promise<Buffer>} - Rendered image buffer
+   * @returns {Promise<Buffer>} Rendered image buffer
    */
   async render(options = {}) {
     const layout = this._buildLayout();
@@ -607,8 +625,8 @@ class CardBuilder {
 
   /**
    * Render card to Buffer (alias for render)
-   * @param {Object} [options]
-   * @returns {Promise<Buffer>}
+   * @param {Object} [options] - Render options
+   * @returns {Promise<Buffer>} Rendered image buffer
    */
   async toBuffer(options = {}) {
     return this.render(options);
@@ -646,26 +664,8 @@ class CardBuilder {
    * @private
    */
   _themeToTokens(theme) {
-    const tokens = {};
-    
-    if (theme.colors) {
-      this._flattenColorsToTokens(theme.colors, 'color', tokens);
-    }
-    
-    if (theme.fonts) {
-      tokens['font.primary'] = theme.fonts.primary;
-      tokens['font.sizes.xs'] = theme.fonts.sizes?.xs;
-      tokens['font.sizes.sm'] = theme.fonts.sizes?.sm;
-      tokens['font.sizes.md'] = theme.fonts.sizes?.md;
-      tokens['font.sizes.lg'] = theme.fonts.sizes?.lg;
-    }
-    
-    if (theme.effects) {
-      tokens['effect.glowStrength'] = theme.effects.glowStrength;
-      tokens['effect.borderRadius'] = theme.effects.borderRadius;
-    }
-    
-    return tokens;
+    const { flattenTheme } = require('../canvas/themes/index');
+    return flattenTheme(theme);
   }
 
   /**
@@ -673,9 +673,11 @@ class CardBuilder {
    * @private
    */
   _flattenColorsToTokens(obj, prefix, result = {}) {
+    if (!obj || typeof obj !== 'object') return result;
+
     for (const [key, value] of Object.entries(obj)) {
-      const tokenName = `${prefix}.${key}`;
-      if (value && typeof value === 'object' && !value.startsWith) {
+      const tokenName = prefix ? `${prefix}.${key}` : key;
+      if (value && typeof value === 'object' && !Array.isArray(value)) {
         this._flattenColorsToTokens(value, tokenName, result);
       } else {
         result[tokenName] = value;
@@ -691,6 +693,76 @@ class CardBuilder {
   getConfig() {
     return { ...this.config };
   }
+
+  /**
+   * Reply to a Discord interaction with the rendered card
+   * @param {Object} interaction - Discord.js interaction (Command, Button, SelectMenu)
+   * @param {Object} [options] - Reply options
+   * @param {string} [options.filename] - Attachment filename
+   * @param {boolean} [options.ephemeral=false] - Whether the reply is ephemeral
+   * @returns {Promise<void>}
+   */
+  async reply(interaction, options = {}) {
+    const { AttachmentBuilder } = require('discord.js');
+    const buffer = await this.render();
+    const defaultName = `${this.config.preset || 'card'}.png`;
+    const attachment = new AttachmentBuilder(buffer, { name: options.filename || defaultName });
+
+    if (interaction.replied || interaction.deferred) {
+      await interaction.editReply({
+        files: [attachment],
+        ...options
+      });
+    } else {
+      await interaction.reply({
+        files: [attachment],
+        ephemeral: options.ephemeral || false,
+        ...options
+      });
+    }
+  }
+
+  /**
+   * Follow up to a Discord interaction with the rendered card
+   * @param {Object} interaction - Discord.js interaction
+   * @param {Object} [options] - Follow-up options
+   * @param {string} [options.filename] - Attachment filename
+   * @param {boolean} [options.ephemeral=false] - Whether the follow-up is ephemeral
+   * @returns {Promise<void>}
+   */
+  async followUp(interaction, options = {}) {
+    const { AttachmentBuilder } = require('discord.js');
+    const buffer = await this.render();
+    const defaultName = `${this.config.preset || 'card'}.png`;
+    const attachment = new AttachmentBuilder(buffer, { name: options.filename || defaultName });
+
+    await interaction.followUp({
+      files: [attachment],
+      ephemeral: options.ephemeral || false,
+      ...options
+    });
+  }
+
+  /**
+   * Send the rendered card to a Discord channel
+   * @param {Object} channel - Discord.js channel object
+   * @param {Object} [options] - Send options
+   * @param {string} [options.filename] - Attachment filename
+   * @returns {Promise<Object>} Sent message object
+   */
+  async send(channel, options = {}) {
+    const { AttachmentBuilder } = require('discord.js');
+    const buffer = await this.render();
+    const defaultName = `${this.config.preset || 'card'}.png`;
+    const attachment = new AttachmentBuilder(buffer, { name: options.filename || defaultName });
+
+    return channel.send({
+      files: [attachment],
+      allowedMentions: options.allowedMentions || {},
+      ...options
+    });
+  }
 }
 
 module.exports = CardBuilder;
+

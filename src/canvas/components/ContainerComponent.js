@@ -1,0 +1,63 @@
+/**
+ * ContainerComponent - Base container for grouping components
+ * @module ContainerComponent
+ */
+
+'use strict';
+
+const { BaseComponent } = require('./BaseComponent');
+
+/**
+ * ContainerComponent - Groups and layouts child components
+ * @extends BaseComponent
+ */
+class ContainerComponent extends BaseComponent {
+  /**
+   * @param {Object} [props={}] - Component properties
+   */
+  constructor(props = {}) {
+    super('container', props);
+  }
+
+  /**
+   * Internal render method
+   * @param {CanvasRenderingContext2D} ctx
+   * @param {Object} bounds - Layout bounds
+   * @param {Object} styles - Computed styles
+   * @param {Object} tokens - Resolved tokens
+   * @returns {Promise<Object>}
+   */
+  async _render(ctx, bounds, styles, tokens) {
+    const { x, y, width, height } = bounds;
+    const backgroundColor = this.getProp('backgroundColor', styles?.background?.color);
+    const borderColor = this.getProp('borderColor');
+    const borderWidth = this.getProp('borderWidth', 0);
+    const cornerRadius = this.getProp('cornerRadius', styles?.effects?.borderRadius || 12);
+
+    const dpi = tokens.dpi || tokens['dpi'] || 2;
+    const scaledRadius = this.scale(cornerRadius, dpi);
+
+    ctx.save();
+
+    // Draw background
+    if (backgroundColor) {
+      ctx.fillStyle = backgroundColor;
+      this.roundRectPath(ctx, x, y, width, height, scaledRadius);
+      ctx.fill();
+    }
+
+    // Draw border
+    if (borderColor && borderWidth > 0) {
+      ctx.strokeStyle = borderColor;
+      ctx.lineWidth = this.scale(borderWidth, dpi);
+      this.roundRectPath(ctx, x, y, width, height, scaledRadius);
+      ctx.stroke();
+    }
+
+    ctx.restore();
+
+    return { x, y, width, height };
+  }
+}
+
+module.exports = { ContainerComponent };
