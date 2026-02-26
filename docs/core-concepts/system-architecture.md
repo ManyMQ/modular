@@ -1,22 +1,22 @@
 # System Architecture
 
-Bu belge, `@osn/modular` motorunun tasarım felsefesini, bileşen hiyerarşisini ve verilerin girişten çıkışa kadar nasıl aktığını açıklar.
+This document describes the design philosophy, component hierarchy, and end-to-end data flow of the `@osn/modular` engine.
 
 ---
 
-## 1. Genel Bakış
+## 1. Overview
 
-`@osn/modular`, Discord botları için **piksel mükemmellikte kart görselleri** üretmek amacıyla tasarlanmış, Node.js üzerinde çalışan modüler bir canvas render motorudur. Sistem üç temel katmandan oluşur:
+`@osn/modular` is a modular canvas rendering engine running on Node.js, designed to produce **pixel-perfect card images** for Discord bots. The system is composed of three primary layers:
 
-| Katman | Sorumluluk |
+| Layer | Responsibility |
 |---|---|
-| **Public API** | Kullanıcının etkileşim kurduğu Builder sınıfları ve `createEngine` fabrikası |
-| **Core Engine** | Tüm alt sistemleri koordine eden orkestratör |
-| **Canvas Pipeline** | Gerçek çizim, stil ve tema işlemlerini yapan düşük seviyeli katman |
+| **Public API** | Builder classes and the `createEngine` factory that users interact with |
+| **Core Engine** | Orchestrator that coordinates all subsystems |
+| **Canvas Pipeline** | Low-level layer responsible for actual drawing, styling, and theming |
 
 ---
 
-## 2. Üst Düzey Mimari
+## 2. High-Level Architecture
 
 ```mermaid
 graph TD
@@ -65,9 +65,9 @@ graph TD
 
 ---
 
-## 3. Engine — Alt Sistem Başlatma Sırası
+## 3. Engine — Subsystem Initialization Order
 
-`Engine` nesnesi oluşturulduğunda, bağımlılıkları doğru sırada enjekte ederek tüm alt sistemleri hazır hale getirir:
+When the `Engine` object is instantiated, it initializes all subsystems by injecting their dependencies in the correct order:
 
 ```mermaid
 sequenceDiagram
@@ -94,9 +94,9 @@ sequenceDiagram
 
 ---
 
-## 4. RenderPipeline — 9 Aşamalı Akış
+## 4. RenderPipeline — 9-Phase Flow
 
-Bir `.render()` çağrısı yapıldığında, `RenderPipeline` aşağıdaki aşamaları sırasıyla çalıştırır:
+When a `.render()` call is made, the `RenderPipeline` executes the following phases in sequence:
 
 ```mermaid
 flowchart LR
@@ -117,25 +117,25 @@ flowchart LR
     START --> P1 --> P2 --> P3 --> P4 --> P5 --> P6 --> P7 --> P8 --> P9 --> END
 ```
 
-### Faz Detayları
+### Phase Details
 
-| # | Faz | Kaynak Sınıf | Çıktı |
+| # | Phase | Source Class | Output |
 |---|---|---|---|
-| 1 | Layout Resolve | `LayoutParser` + `LayoutResolver` | Resolve edilmiş koordinat ağacı |
-| 2 | Token Resolve | `TokenEngine` + `ThemeManager` | Birleştirilmiş token haritası |
-| 3 | Style Resolve | `StyleEngine` | Hesaplanmış stil objesi |
-| 4 | Asset Preload | `AssetLoader` + `LRUCache` | Önbelleğe alınmış görseller |
+| 1 | Layout Resolve | `LayoutParser` + `LayoutResolver` | Resolved coordinate tree |
+| 2 | Token Resolve | `TokenEngine` + `ThemeManager` | Merged token map |
+| 3 | Style Resolve | `StyleEngine` | Computed style object |
+| 4 | Asset Preload | `AssetLoader` + `LRUCache` | Cached images & fonts |
 | 5 | Pre-Render | `Engine.hooks.beforeRender` | — |
-| 6 | Component Render | `ComponentRegistry` + `CanvasRenderer` | Çizilmiş canvas |
-| 7 | FX Pass | `CanvasRenderer.applyEffect` | Post-process canvas |
+| 6 | Component Render | `ComponentRegistry` + `CanvasRenderer` | Drawn canvas |
+| 7 | FX Pass | `CanvasRenderer.applyEffect` | Post-processed canvas |
 | 8 | Post-Render | `Engine.hooks.afterRender` | — |
 | 9 | Export Encode | `BufferManager` | `Buffer` (PNG/JPEG/WebP) |
 
 ---
 
-## 5. Tema Sistemi Veri Akışı
+## 5. Theme System Data Flow
 
-Tema sistemi **veri odaklı** (data-driven) bir yaklaşım izler. Temalar çizmez; yalnızca token değerleri sağlar.
+The theme system follows a **data-driven** approach. Themes do not draw anything; they only supply token values.
 
 ```mermaid
 flowchart TD
@@ -170,9 +170,9 @@ flowchart TD
 
 ---
 
-## 6. Builder → Engine → Pipeline Çağrı Zinciri
+## 6. Builder → Engine → Pipeline Call Chain
 
-Kullanıcının `new RankCard()` ile başladığı akıştan `Buffer` döndürülmesine kadar tam zincir:
+The complete chain from the user's `new RankCard()` call all the way to the returned `Buffer`:
 
 ```mermaid
 sequenceDiagram
@@ -211,9 +211,9 @@ sequenceDiagram
 
 ---
 
-## 7. Bileşen Ağacı (Component Registry)
+## 7. Component Tree (Component Registry)
 
-`ComponentRegistry`, tüm çizilebilir bileşenleri isimle depolar. `RenderPipeline`, layout ağacındaki her node için ilgili bileşen sınıfını registry'den alır.
+`ComponentRegistry` stores all drawable components by name. For each node in the layout tree, `RenderPipeline` looks up the corresponding component class from the registry.
 
 ```mermaid
 graph TD
@@ -238,9 +238,9 @@ graph TD
 
 ---
 
-## 8. Plugin & Hook Sistemi
+## 8. Plugin & Hook System
 
-Plugin'ler ve Hook'lar, render döngüsünün belirli noktalarına müdahale etmenizi sağlar.
+Plugins and hooks allow you to intercept the render cycle at specific points.
 
 ```mermaid
 flowchart LR
@@ -269,9 +269,9 @@ flowchart LR
 
 ---
 
-## 9. Önbellek Mimarisi
+## 9. Cache Architecture
 
-`LRUCache`, tekrarlayan avatar URL'lerini ve fontları bellekte tutar; gereksiz ağ isteklerini önler.
+`LRUCache` keeps repeatedly used avatar URLs and fonts in memory, preventing unnecessary network requests.
 
 ```mermaid
 flowchart LR
@@ -286,13 +286,13 @@ flowchart LR
     CACHE -->|"cache.set(url, buffer)"| AL2
 ```
 
-- **Varsayılan davranış**: Aynı avatar URL'si birden fazla kez render edildiğinde yalnızca ilk seferinde indirilir.
-- **Temizleme**: `engine.clearCache()` ile tamamen sıfırlanabilir.
-- **İstatistik**: `engine.getCacheStats()` → `{ size, maxSize }`
+- **Default behaviour**: When the same avatar URL is rendered multiple times, it is downloaded only on the first request.
+- **Clearing**: Can be fully reset via `engine.clearCache()`.
+- **Stats**: `engine.getCacheStats()` → `{ size, maxSize }`
 
 ---
 
-## 10. Tasarım Prensipleri
+## 10. Design Principles
 
 ```mermaid
 mindmap
@@ -317,10 +317,10 @@ mindmap
 
 ---
 
-## Sonraki Adımlar
+## Next Steps
 
-- [Render Pipeline Detayları →](./render-pipeline.md)
+- [Render Pipeline Details →](./render-pipeline.md)
 - [Builder API →](./builders.md)
-- [Tema Sistemi →](./themes.md)
-- [Özel Tema Oluşturma →](../guides/creating-custom-theme.md)
-- [Performans Kılavuzu →](../guides/performance.md)
+- [Theme System →](./themes.md)
+- [Creating a Custom Theme →](../guides/creating-custom-theme.md)
+- [Performance Guide →](../guides/performance.md)
