@@ -20,7 +20,7 @@ Bu belge, `@osn/modular` motorunun tasarım felsefesini, bileşen hiyerarşisini
 
 ```mermaid
 graph TD
-    USER["👤 Kullanıcı Kodu\n(Discord Bot)"]
+    USER["👤 User Code\n(Discord Bot)"]
 
     subgraph PUBLIC_API["📦 Public API (@osn/modular)"]
         direction LR
@@ -33,12 +33,12 @@ graph TD
     end
 
     subgraph CORE["⚙️ Core Engine"]
-        ENGINE["Engine\n(Orkestratör)"]
-        PIPELINE["RenderPipeline\n(9 Aşamalı)"]
+        ENGINE["Engine\n(Orchestrator)"]
+        PIPELINE["RenderPipeline\n(9 Phases)"]
         BUILDER["CardBuilder\n(DSL Composer)"]
     end
 
-    subgraph SUBSYSTEMS["🔧 Alt Sistemler"]
+    subgraph SUBSYSTEMS["🔧 Subsystems"]
         TM["ThemeManager"]
         TE["TokenEngine"]
         SE["StyleEngine"]
@@ -71,7 +71,7 @@ graph TD
 
 ```mermaid
 sequenceDiagram
-    participant U as Kullanıcı
+    participant U as User
     participant E as Engine
     participant C as LRUCache
     participant AL as AssetLoader
@@ -85,11 +85,11 @@ sequenceDiagram
     E->>AL: new AssetLoader(cache)
     E->>R: new CanvasRenderer(config)
     E->>TM: new ThemeManager()
-    TM-->>E: Varsayılan temalar yüklendi
+    TM-->>E: Default themes registered
     E->>CR: new ComponentRegistry()
-    CR-->>E: text, avatar, progress... kayıtlı
+    CR-->>E: text, avatar, progress... registered
     E->>PM: new PluginManager(engine)
-    E-->>U: Engine hazır ✓
+    E-->>U: Engine ready ✓
 ```
 
 ---
@@ -102,17 +102,17 @@ Bir `.render()` çağrısı yapıldığında, `RenderPipeline` aşağıdaki aşa
 flowchart LR
     START(["🟢 render(layout, data, options)"])
 
-    P1["📐 Faz 1\nLayout Resolve\nAbsolut koordinat\nhesabı"]
-    P2["🎨 Faz 2\nToken Resolve\nTema + değişken\nbirleştirme"]
-    P3["💅 Faz 3\nStyle Resolve\nToken → görsel stil\ndönüşümü"]
-    P4["🖼️ Faz 4\nAsset Preload\nGörsel ve font\nön yükleme"]
-    P5["🔌 Faz 5\nPre-Render Hooks\nPlugin çalıştırma\n(beforeRender)"]
-    P6["✏️ Faz 6\nComponent Render\nHer bileşen\ncanvas'a çizilir"]
-    P7["✨ Faz 7\nFX Pass\nGlobal efektler\n(glow, scanline…)"]
-    P8["🔌 Faz 8\nPost-Render Hooks\nPlugin çalıştırma\n(afterRender)"]
-    P9["📦 Faz 9\nExport Encode\nPNG/JPEG/WebP\nbuffer çıktısı"]
+    P1["📐 Phase 1\nLayout Resolve\nCompute absolute\ncoordinates"]
+    P2["🎨 Phase 2\nToken Resolve\nMerge theme +\nvariables"]
+    P3["💅 Phase 3\nStyle Resolve\nToken → visual\nstyle mapping"]
+    P4["🖼️ Phase 4\nAsset Preload\nLoad images\nand fonts"]
+    P5["🔌 Phase 5\nPre-Render Hooks\nRun plugins\n(beforeRender)"]
+    P6["✏️ Phase 6\nComponent Render\nDraw each component\nonto canvas"]
+    P7["✨ Phase 7\nFX Pass\nGlobal effects\n(glow, scanline…)"]
+    P8["🔌 Phase 8\nPost-Render Hooks\nRun plugins\n(afterRender)"]
+    P9["📦 Phase 9\nExport Encode\nPNG/JPEG/WebP\nbuffer output"]
 
-    END(["🏁 Buffer döndürülür"])
+    END(["🏁 Buffer returned"])
 
     START --> P1 --> P2 --> P3 --> P4 --> P5 --> P6 --> P7 --> P8 --> P9 --> END
 ```
@@ -139,24 +139,24 @@ Tema sistemi **veri odaklı** (data-driven) bir yaklaşım izler. Temalar çizme
 
 ```mermaid
 flowchart TD
-    subgraph THEME_SYS["🎨 Tema Sistemi"]
-        BUILTIN["Dahili Temalar\n(dark, glass-modern,\nneon-purple, cyberpunk…)"]
-        CUSTOM["Özel Tema\nengine.registerTheme()"]
+    subgraph THEME_SYS["🎨 Theme System"]
+        BUILTIN["Built-in Themes\n(dark, glass-modern,\nneon-purple, cyberpunk…)"]
+        CUSTOM["Custom Theme\nengine.registerTheme()"]
         TM2["ThemeManager\n.setActive() / .getActive()"]
     end
 
-    subgraph TOKEN_SYS["🪙 Token Sistemi"]
-        RAW["Ham Token'lar\n{ accent.primary: '#7c3aed' }"]
+    subgraph TOKEN_SYS["🪙 Token System"]
+        RAW["Raw Tokens\n{ accent.primary: '#7c3aed' }"]
         TE2["TokenEngine\n.resolve() / .defineBatch()"]
-        RESOLVED["Resolve Edilmiş\nToken Haritası"]
+        RESOLVED["Resolved\nToken Map"]
     end
 
-    subgraph STYLE_SYS["💅 Stil Sistemi"]
+    subgraph STYLE_SYS["💅 Style System"]
         SE2["StyleEngine\n.compute(layout, theme, tokens)"]
         STYLES["Computed Styles\n{ background, text, border... }"]
     end
 
-    RENDERER["🖌️ CanvasRenderer\n(bileşenlere aktarılır)"]
+    RENDERER["🖌️ CanvasRenderer\n(passed to components)"]
 
     BUILTIN --> TM2
     CUSTOM --> TM2
@@ -176,7 +176,7 @@ Kullanıcının `new RankCard()` ile başladığı akıştan `Buffer` döndürü
 
 ```mermaid
 sequenceDiagram
-    participant U as Kullanıcı
+    participant U as User
     participant B as RankCard (Builder)
     participant E as Engine
     participant RP as RenderPipeline
@@ -196,11 +196,11 @@ sequenceDiagram
     B->>E: engine.render(layout, data, options)
     E->>RP: RenderPipeline.execute(engine, layout, data, options)
 
-    RP->>RP: stepLayoutResolve → koordinatlar hesaplandı
+    RP->>RP: stepLayoutResolve → coordinates computed
     RP->>TM: getActive() → "glass-modern"
-    RP->>TE: resolve(themeTokens + data) → tokenlar birleştirildi
-    RP->>AL: load(avatar_url) → önbellekten / URL'den yüklendi
-    RP->>CR: get("rank-card") → CardRenderer sınıfı
+    RP->>TE: resolve(themeTokens + data) → tokens merged
+    RP->>AL: load(avatar_url) → loaded from cache / URL
+    RP->>CR: get("rank-card") → CardRenderer class
     RP->>CV: createContext(800, 400, dpi)
     RP->>CV: component.render(ctx, bounds, styles, tokens)
     RP->>CV: applyEffect(effects)
@@ -219,8 +219,8 @@ sequenceDiagram
 graph TD
     REG["🗂️ ComponentRegistry"]
 
-    REG --> UI["UI Bileşenleri"]
-    REG --> CARD["Kart Kontrolcüleri"]
+    REG --> UI["UI Components"]
+    REG --> CARD["Card Controllers"]
 
     UI --> T["text\n→ TextComponent"]
     UI --> AV["avatar\n→ AvatarComponent"]
@@ -244,7 +244,7 @@ Plugin'ler ve Hook'lar, render döngüsünün belirli noktalarına müdahale etm
 
 ```mermaid
 flowchart LR
-    subgraph HOOKS["⚓ Hook Noktaları"]
+    subgraph HOOKS["⚓ Hook Points"]
         H1["preLayout"]
         H2["postLayout"]
         H3["beforeRender"]
@@ -254,16 +254,16 @@ flowchart LR
     end
 
     subgraph PIPELINE2["RenderPipeline"]
-        S1[Faz 1: Layout] -->|preLayout / postLayout| H1 & H2
-        S5[Faz 5: Pre-Render] --> H3
-        S6[Faz 6: Render] -->|her bileşen| H4 & H5
-        S8[Faz 8: Post-Render] --> H6
+        S1[Phase 1: Layout] -->|preLayout / postLayout| H1 & H2
+        S5[Phase 5: Pre-Render] --> H3
+        S6[Phase 6: Render] -->|per component| H4 & H5
+        S8[Phase 8: Post-Render] --> H6
     end
 
     USER2["engine.onHook('beforeRender', fn)"]
     PLUGIN["engine.use(myPlugin)"]
 
-    USER2 -->|kayıt| HOOKS
+    USER2 -->|register| HOOKS
     PLUGIN -->|PluginManager| HOOKS
 ```
 
@@ -280,9 +280,9 @@ flowchart LR
     NET["🌐 HTTP / Disk"]
 
     AL2 -->|"cache.get(url)"| CACHE
-    CACHE -->|"HIT: mevcut"| AL2
-    CACHE -->|"MISS: yok"| NET
-    NET -->|"görsel yüklendi"| CACHE
+    CACHE -->|"HIT: exists"| AL2
+    CACHE -->|"MISS: not found"| NET
+    NET -->|"asset loaded"| CACHE
     CACHE -->|"cache.set(url, buffer)"| AL2
 ```
 
@@ -296,23 +296,23 @@ flowchart LR
 
 ```mermaid
 mindmap
-  root)@osn/modular Tasarım(
-    Veri Odaklı
-      Temalar çizmez, token sağlar
-      Builder'lar stil bilmez, veri organize eder
-      Layout bağımsızdır, pozisyonu açıklar
-    Modülerlik
-      Her alt sistem bağımsız değiştirilebilir
-      Plugin API ile genişletilebilir
-      Hook'larla müdahale noktaları açık
-    Performans
-      LRU önbellekleme
-      Paralel asset yükleme
-      Lazy Builder yükleme
-    Geliştirici Deneyimi
+  root)@osn/modular Design(
+    Data-Driven
+      Themes don't draw, they provide tokens
+      Builders don't style, they organize data
+      Layout is independent, describes position
+    Modularity
+      Each subsystem is independently replaceable
+      Extensible via Plugin API
+      Open hook points for interception
+    Performance
+      LRU caching
+      Parallel asset loading
+      Lazy Builder loading
+    Developer Experience
       Fluent Builder API
-      Standart DSL layout formatı
-      Ayrıntılı hata mesajları
+      Standard DSL layout format
+      Detailed error messages
 ```
 
 ---
