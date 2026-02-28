@@ -18,7 +18,6 @@ const EventEmitter = require('events');
 const { CanvasRenderer } = require('../canvas/engine/CanvasRenderer');
 const { AssetLoader } = require('../canvas/engine/AssetLoader');
 const { BufferManager } = require('../canvas/engine/BufferManager');
-const { CardRenderer } = require('../canvas/components/CardRenderer');
 const { TextComponent } = require('../canvas/components/TextComponent');
 const { AvatarComponent } = require('../canvas/components/AvatarComponent');
 const { ProgressComponent } = require('../canvas/components/ProgressComponent');
@@ -30,9 +29,17 @@ const { StyleEngine } = require('../canvas/styling/StyleEngine');
 const { TokenEngine } = require('../canvas/styling/TokenEngine');
 const { ThemeManager } = require('../canvas/themes/ThemeManager');
 const { PluginManager } = require('./plugins/PluginManager');
-const { ComponentRegistry } = require('../canvas/components/BaseComponent');
+const { ComponentRegistry } = require('./ComponentRegistry');
 const { LRUCache } = require('./cache/LRUCache');
 const CardBuilder = require('./CardBuilder');
+
+// Card renderers — each card type has its own focused renderer
+const { RankCardRenderer } = require('../canvas/renderers/RankCardRenderer');
+const { MusicCardRenderer } = require('../canvas/renderers/MusicCardRenderer');
+const { LeaderboardCardRenderer } = require('../canvas/renderers/LeaderboardCardRenderer');
+const { InviteCardRenderer } = require('../canvas/renderers/InviteCardRenderer');
+const { ProfileCardRenderer } = require('../canvas/renderers/ProfileCardRenderer');
+const { WelcomeCardRenderer } = require('../canvas/renderers/WelcomeCardRenderer');
 
 // Builders are loaded lazily in factory methods to prevent circular dependencies
 
@@ -113,24 +120,24 @@ class Engine extends EventEmitter {
     this.componentRegistry.register('avatar', AvatarComponent);
     this.componentRegistry.register('progress', ProgressComponent);
     this.componentRegistry.register('media', MediaComponent);
-    this.componentRegistry.register('image', MediaComponent); // Alias
-    this.componentRegistry.register('album-art', MediaComponent); // Alias
-    this.componentRegistry.register('banner', MediaComponent); // Alias
+    this.componentRegistry.register('image', MediaComponent);
+    this.componentRegistry.register('album-art', MediaComponent);
+    this.componentRegistry.register('banner', MediaComponent);
     this.componentRegistry.register('container', ContainerComponent);
-    this.componentRegistry.register('box', ContainerComponent); // Alias
-    this.componentRegistry.register('level-box', ContainerComponent); // Alias
-    this.componentRegistry.register('stat-box', ContainerComponent); // Alias
+    this.componentRegistry.register('box', ContainerComponent);
+    this.componentRegistry.register('level-box', ContainerComponent);
+    this.componentRegistry.register('stat-box', ContainerComponent);
 
-    // Card Controllers
-    this.componentRegistry.register('rank-card', CardRenderer);
-    this.componentRegistry.register('music-card', CardRenderer);
-    this.componentRegistry.register('leaderboard-card', CardRenderer);
-    this.componentRegistry.register('invite-card', CardRenderer);
-    this.componentRegistry.register('profile-card', CardRenderer);
-    this.componentRegistry.register('welcome-card', CardRenderer);
+    // Card Controllers — each type uses its own dedicated renderer
+    this.componentRegistry.register('rank-card', RankCardRenderer);
+    this.componentRegistry.register('music-card', MusicCardRenderer);
+    this.componentRegistry.register('leaderboard-card', LeaderboardCardRenderer);
+    this.componentRegistry.register('invite-card', InviteCardRenderer);
+    this.componentRegistry.register('profile-card', ProfileCardRenderer);
+    this.componentRegistry.register('welcome-card', WelcomeCardRenderer);
 
-    // Legacy/Generic aliases
-    this.componentRegistry.register('card', CardRenderer);
+    // Generic fallback
+    this.componentRegistry.register('card', RankCardRenderer);
   }
 
   // ==================== Builder Factory Methods ====================

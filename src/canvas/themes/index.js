@@ -1,25 +1,20 @@
-/**
- * Themes Index - Unified entry point for all card themes.
- * Provides the canonical `themeToTokens()` with full theme resolution.
- *
- * @module themes
- */
-
 'use strict';
 
-const { cardThemes: legacyThemes, cardDimensions, flattenTheme } = require('./CardThemes');
-const { BaseTheme } = require('./BaseTheme');
-const minimalDeveloper = require('./new/minimal-developer');
-const neonTech = require('./new/neon-tech');
-const glassModern = require('./new/glass-modern');
-const pinkGradient = require('./new/pink-gradient');
-const esport = require('./new/esport');
-
 /**
- * Unified themes collection.
- * Total 21 themes: 16 legacy + 5 new.
- * @type {Object.<string, Object>}
+ * Themes Index — unified entry point for all 21 card themes.
+ * Legacy themes live in ./legacy.js; new themes are each a standalone file here.
  */
+
+const { cardThemes: legacyThemes, cardDimensions, flattenTheme } = require('./legacy');
+const minimalDeveloper = require('./minimal-developer');
+const neonTech = require('./neon-tech');
+const glassModern = require('./glass-modern');
+const pinkGradient = require('./pink-gradient');
+const esport = require('./esport');
+
+const { BaseTheme } = require('./BaseTheme');
+
+/** All 21 themes in a single flat map. */
 const cardThemes = {
     ...legacyThemes,
     'minimal-developer': minimalDeveloper,
@@ -30,12 +25,9 @@ const cardThemes = {
 };
 
 /**
- * Convert a theme name or definition to a flat token map.
- * This is the canonical entry point — resolves string names against
- * the full 21-theme collection before flattening.
- *
- * @param {string|Object} theme - Theme name or theme definition object
- * @returns {Object} Flat token map keyed by dot-notation paths
+ * Convert a theme name or definition object to a flat token map.
+ * @param {string|Object} theme
+ * @returns {Object}
  */
 function themeToTokens(theme) {
     if (typeof theme === 'string') {
@@ -46,8 +38,8 @@ function themeToTokens(theme) {
 }
 
 /**
- * Register all default themes to a ThemeManager instance.
- * @param {import('./ThemeManager').ThemeManager} themeManager
+ * Register all default themes onto a ThemeManager instance.
+ * @param {import('../themes/ThemeManager').ThemeManager} themeManager
  */
 function registerDefaultThemes(themeManager) {
     Object.entries(cardThemes).forEach(([name, theme]) => {
@@ -56,8 +48,8 @@ function registerDefaultThemes(themeManager) {
 }
 
 /**
- * Get all available theme identifiers with metadata.
- * @returns {Array<{id: string, name: string, description: string}>}
+ * List all available theme IDs with metadata.
+ * @returns {{ id: string, name: string, description: string }[]}
  */
 function getAvailableThemes() {
     return Object.keys(cardThemes).map(key => ({

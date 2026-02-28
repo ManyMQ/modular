@@ -88,6 +88,12 @@ export function createTheme(config: any) {
 
 // 4. Stable Core Exports
 export { Engine };
+import RenderPipeline = require('./core/RenderPipeline');
+import ThemeManagerMod = require('./canvas/themes/ThemeManager');
+const ThemeManager = ThemeManagerMod.ThemeManager;
+import CardBuilderMod = require('./core/CardBuilder');
+const CardBuilder = CardBuilderMod as any;
+export { RenderPipeline, ThemeManager, CardBuilder };
 export {
     RankCardBuilder,
     ProfileCardBuilder,
@@ -99,4 +105,4 @@ export {
 
 // 5. Default Themes & Types
 export * from './errors/ModularError';
-export { cardThemes as themes } from './canvas/themes/index';
+export { cardThemes as themes, themeToTokens, getAvailableThemes, BaseTheme } from './canvas/themes/index';

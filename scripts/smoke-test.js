@@ -25,7 +25,7 @@ console.log('─'.repeat(50));
 // 1. Module loads without errors
 let mod;
 try {
-    mod = require('../index');
+    mod = require('..');
     assert(true, 'Module loads without errors');
 } catch (e) {
     console.log(`  ✗ Module load FAILED: ${e.message}`);

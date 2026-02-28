@@ -228,12 +228,13 @@ graph TD
     UI --> ME["media / image / album-art / banner\n→ MediaComponent"]
     UI --> CO["container / box / level-box / stat-box\n→ ContainerComponent"]
 
-    CARD --> RK["rank-card → CardRenderer"]
-    CARD --> MU["music-card → CardRenderer"]
-    CARD --> LB["leaderboard-card → CardRenderer"]
-    CARD --> IV["invite-card → CardRenderer"]
-    CARD --> PF["profile-card → CardRenderer"]
-    CARD --> WL["welcome-card → CardRenderer"]
+    CARD --> RK["rank-card → RankCardRenderer"]
+    CARD --> MU["music-card → MusicCardRenderer"]
+    CARD --> LB["leaderboard-card → LeaderboardCardRenderer"]
+    CARD --> IV["invite-card → InviteCardRenderer"]
+    CARD --> PF["profile-card → ProfileCardRenderer"]
+    CARD --> WL["welcome-card → WelcomeCardRenderer"]
+    CARD --> FL["card (generic) → RankCardRenderer"]
 ```
 
 ---
