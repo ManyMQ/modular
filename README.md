@@ -58,7 +58,7 @@ To get the most out of ReformLabs Modular, follow our curated documentation path
 
 | Rank Card | Music Card | Profile Card |
 | :---: | :---: | :---: |
-| ![Rank](./docs/assets/examples/rank-cyberpunk.png) | ![Music](./docs/assets/examples/music-neon-tech.png) | ![Profile](./docs/assets/examples/profile-glass-modern.png) |
+| ![Rank](./docs/assets/examples/rank-cyberpunk.png) | ![Music](./docs/assets/examples/music-neon-tech.png) | ![Invite](./docs/assets/examples/invite-minimal-developer.png) |
 | `cyberpunk` | `neon-tech` | `glass-modern` |
 
 Explore the **[Full Examples Overview](./docs/examples/examples-overview.md)** for more.
