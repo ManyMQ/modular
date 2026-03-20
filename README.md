@@ -67,4 +67,4 @@ Explore the **[Full Examples Overview](./docs/examples/examples-overview.md)** f
 We welcome contributions! Please see our architecture guide before submitting a PR.
 
 ## 📜 License
-MIT
+Apache-2.0
