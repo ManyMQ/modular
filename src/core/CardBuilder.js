@@ -39,7 +39,7 @@ class CardBuilder {
     this.config = {
       width: 800,
       height: 400,
-      dpi: engine.config.dpi || 2,
+      dpi: (engine || this.engine).config.dpi || 2,
       theme: 'default',
       preset: null,
       layout: { type: 'container', children: [] },
@@ -465,6 +465,46 @@ class CardBuilder {
     if (data && typeof data === 'object') {
       this.config.data = { ...this.config.data, ...data };
     }
+    return this;
+  }
+
+  /**
+   * Set custom username
+   * @param {string} username - Custom username
+   * @returns {CardBuilder} This builder instance for method chaining
+   */
+  setUsername(username) {
+    this.setData({ username: String(username) });
+    return this;
+  }
+
+  /**
+   * Set avatar URL
+   * @param {string} url - Avatar image URL
+   * @returns {CardBuilder} This builder instance for method chaining
+   */
+  setAvatar(url) {
+    this.setData({ avatar: String(url) });
+    return this;
+  }
+
+  /**
+   * Set card title
+   * @param {string} title - Title string
+   * @returns {CardBuilder} This builder instance for method chaining
+   */
+  setTitle(title) {
+    this.setData({ title: String(title) });
+    return this;
+  }
+
+  /**
+   * Set card subtitle
+   * @param {string} subtitle - Subtitle string
+   * @returns {CardBuilder} This builder instance for method chaining
+   */
+  setSubtitle(subtitle) {
+    this.setData({ subtitle: String(subtitle) });
     return this;
   }
 

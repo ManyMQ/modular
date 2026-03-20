@@ -64,7 +64,7 @@ class WelcomeCardBuilder extends CardBuilder {
    * @returns {WelcomeCardBuilder} This builder instance for method chaining
    */
   setWelcomeMessage(message) {
-    this.setData({ welcomeText: String(message) });
+    this.setData({ welcomeMessage: String(message) });
     return this;
   }
 

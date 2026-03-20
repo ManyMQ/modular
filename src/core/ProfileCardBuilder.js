@@ -66,6 +66,36 @@ class ProfileCardBuilder extends CardBuilder {
   }
 
   /**
+   * Set custom username
+   * @param {string} username - Custom username
+   * @returns {ProfileCardBuilder} This builder instance for method chaining
+   */
+  setUsername(username) {
+    this.setData({ username: String(username) });
+    return this;
+  }
+
+  /**
+   * Set avatar URL
+   * @param {string} url - Avatar image URL
+   * @returns {ProfileCardBuilder} This builder instance for method chaining
+   */
+  setAvatar(url) {
+    this.setData({ avatar: String(url) });
+    return this;
+  }
+
+  /**
+   * Set profile title/bio
+   * @param {string} title - Title string
+   * @returns {ProfileCardBuilder} This builder instance for method chaining
+   */
+  setTitle(title) {
+    this.setData({ title: String(title) });
+    return this;
+  }
+
+  /**
    * Set statistics
    * @param {Object} stats - Stats object
    * @param {number} [stats.level] - User level

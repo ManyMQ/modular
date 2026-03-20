@@ -72,6 +72,16 @@ class MusicCardBuilder extends CardBuilder {
   }
 
   /**
+   * Set track title (Alias for setTitle)
+   * @param {string} name - Track title name
+   * @returns {MusicCardBuilder} This builder instance for method chaining
+   */
+  setTrackName(name) {
+    this.setData({ trackName: String(name) });
+    return this;
+  }
+
+  /**
    * Set artist name
    * @param {string} artist - Artist name string
    * @returns {MusicCardBuilder} This builder instance for method chaining
@@ -117,6 +127,16 @@ class MusicCardBuilder extends CardBuilder {
    * @returns {MusicCardBuilder} This builder instance for method chaining
    */
   setPlaying(isPlaying) {
+    this.setData({ isPlaying: Boolean(isPlaying) });
+    return this;
+  }
+
+  /**
+   * Set playing state (Alias for setPlaying)
+   * @param {boolean} isPlaying - Playing state
+   * @returns {MusicCardBuilder} This builder instance for method chaining
+   */
+  setIsPlaying(isPlaying) {
     this.setData({ isPlaying: Boolean(isPlaying) });
     return this;
   }

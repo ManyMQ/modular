@@ -56,6 +56,36 @@ class InviteCardBuilder extends CardBuilder {
   }
 
   /**
+   * Set custom username
+   * @param {string} username - Custom username
+   * @returns {InviteCardBuilder} This builder instance for method chaining
+   */
+  setUsername(username) {
+    this.setData({ username: String(username) });
+    return this;
+  }
+
+  /**
+   * Set avatar URL
+   * @param {string} url - Avatar image URL
+   * @returns {InviteCardBuilder} This builder instance for method chaining
+   */
+  setAvatar(url) {
+    this.setData({ avatar: String(url) });
+    return this;
+  }
+
+  /**
+   * Set card title
+   * @param {string} title - Title string
+   * @returns {InviteCardBuilder} This builder instance for method chaining
+   */
+  setTitle(title) {
+    this.setData({ title: String(title) });
+    return this;
+  }
+
+  /**
    * Set invite data
    * @param {Object} invite - Invite statistics object
    * @param {number} [invite.invites] - Total invites
@@ -120,6 +150,16 @@ class InviteCardBuilder extends CardBuilder {
       milestoneProgress: Number(progress) || 0,
       milestoneMax: Number(max) || 250
     });
+    return this;
+  }
+
+  /**
+   * Set milestone maximum target
+   * @param {number} max - Maximum target value
+   * @returns {InviteCardBuilder} This builder instance for method chaining
+   */
+  setMilestoneMax(max) {
+    this.setData({ milestoneMax: Number(max) || 250 });
     return this;
   }
 

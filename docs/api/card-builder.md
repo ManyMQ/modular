@@ -20,6 +20,28 @@ Overrides the default dimensions of the card.
 Overrides the global engine DPI for this specific card.
 - **Param**: `dpi` (number) - Higher values (2, 3) produce sharper images but take slightly longer to render.
 
+### Data Methods
+
+#### `.setUsername(username)`
+Sets a custom username string.
+- **Param**: `username` (string)
+
+#### `.setAvatar(url)`
+Sets the avatar image URL.
+- **Param**: `url` (string)
+
+#### `.setTitle(title)`
+Sets a primary title or bio string.
+- **Param**: `title` (string)
+
+#### `.setSubtitle(subtitle)`
+Sets a secondary subtitle or motto string.
+- **Param**: `subtitle` (string)
+
+#### `.setUser(userObject)`
+Utility that extracts username, discriminator, and avatar from a `discord.js` User object.
+- **Param**: `userObject` (Object)
+
 ### Styling & Customization
 
 #### `.setToken(name, value)`
@@ -46,9 +68,6 @@ Alias for `.render()`.
 ## Specialized Class: `RankCardBuilder`
 
 Includes methods specific to gaming and leveling statistics.
-
-#### `.setUser(userObject)`
-A utility that extracts username, discriminator, and avatar from a `discord.js` User object.
 
 #### `.setStats({ level, rank, xp, maxXp, score })`
 Sets the numeric indicators and computes the progress bar fill.
