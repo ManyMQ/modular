@@ -1,6 +1,6 @@
 /**
- * @osn/modular - Production-grade Discord card generation engine
- * @module @osn/modular
+ * @reformlabs/modular - Production-grade Discord card generation engine
+ * @module @reformlabs/modular
  */
 
 import { Engine } from './core/Engine';

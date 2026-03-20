@@ -1,5 +1,9 @@
 # API Reference: Theme Engine
 
+[← Back: CardBuilder API](./card-builder.md) | [Next: Render Engine API →](./render-engine.md)
+
+---
+
 The Theme Engine is responsible for the lifecycle of styles within the library. It handles registration, validation, and tokenization.
 
 ## `ThemeManager`

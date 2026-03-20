@@ -1,4 +1,8 @@
-# Performance & Optimization
+# Performance & Scaling
+
+[← Back: Custom Themes](./creating-custom-theme.md) | [Next: Examples Overview →](../examples/examples-overview.md)
+
+---
 
 The Modular engine is built for speed, typically rendering cards in under 100ms. However, certain configurations can significantly impact memory and CPU usage. This guide helps you optimize your application for high-scale production environments.
 

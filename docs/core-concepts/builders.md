@@ -1,5 +1,9 @@
 # Card Builders: The Fluent API
 
+[← Back: Render Pipeline](./render-pipeline.md) | [Next: System Architecture →](./system-architecture.md)
+
+---
+
 Builders are high-level abstractions that make it easy to create specific types of Discord cards without manual layout configuration.
 
 ## 1. RankCardBuilder

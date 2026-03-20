@@ -1,12 +1,16 @@
 # System Architecture
 
-This document describes the design philosophy, component hierarchy, and end-to-end data flow of the `@osn/modular` engine.
+[← Back: Card Builders](./builders.md) | [Next: API Reference - CardBuilder →](../api/card-builder.md)
+
+---
+
+This document describes the design philosophy, component hierarchy, and end-to-end data flow of the `@reformlabs/modular` engine.
 
 ---
 
 ## 1. Overview
 
-`@osn/modular` is a modular canvas rendering engine running on Node.js, designed to produce **pixel-perfect card images** for Discord bots. The system is composed of three primary layers:
+`@reformlabs/modular` is a modular canvas rendering engine running on Node.js, designed to produce **pixel-perfect card images** for Discord bots. The system is composed of three primary layers:
 
 | Layer | Responsibility |
 |---|---|
@@ -22,7 +26,7 @@ This document describes the design philosophy, component hierarchy, and end-to-e
 graph TD
     USER["👤 User Code\n(Discord Bot)"]
 
-    subgraph PUBLIC_API["📦 Public API (@osn/modular)"]
+    subgraph PUBLIC_API["📦 Public API (@reformlabs/modular)"]
         direction LR
         RC["RankCard"]
         PC["ProfileCard"]
@@ -297,7 +301,7 @@ flowchart LR
 
 ```mermaid
 mindmap
-  root)@osn/modular Design(
+  root)@reformlabs/modular Design(
     Data-Driven
       Themes don't draw, they provide tokens
       Builders don't style, they organize data

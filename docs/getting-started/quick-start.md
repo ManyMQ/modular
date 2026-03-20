@@ -1,4 +1,8 @@
-# Quick Start
+# Quick Start Guide
+
+[← Back: Installation](./installation.md) | [Next: First Card In-Depth →](./first-card.md)
+
+---
 
 Get your first Discord card rendered in less than 2 minutes. This guide covers the absolute essentials of using the Modular engine.
 
@@ -15,7 +19,7 @@ The typical lifecycle of creating a card follows four simple steps:
 ## 2. Your First Rank Card
 
 ```javascript
-import { RankCard } from '@osn/modular';
+import { RankCard } from '@reformlabs/modular';
 import fs from 'fs';
 
 async function generateRank() {
@@ -76,4 +80,4 @@ await engine.createRankCard()
 
 ---
 
-Next: [Your First Card](./first-card.md)
+[← Back: Installation](./installation.md) | [Next: First Card In-Depth →](./first-card.md)

@@ -1,6 +1,11 @@
-# Asset Mapping & Design Language
+# Design System Mapping
 
-This guide explains how the design assets in `docs/assets/` map to the library's internal systems—from theme tokens to the final rendering pipeline.
+[← Back: Render Engine API](../api/render-engine.md) | [Next: Custom Theme Creation →](../guides/creating-custom-theme.md)
+
+---
+
+This guide explains how the design assets in `docs/assets/` map to the library's internal systems
+—from theme tokens to the final rendering pipeline.
 
 ## 1. Primary Branding Assets
 

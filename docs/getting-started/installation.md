@@ -1,4 +1,8 @@
-# Installation
+# Installation Guide
+
+[← Back to README](../../README.md) | [Next: Quick Start →](./quick-start.md)
+
+---
 
 The Modular Discord Card Engine is a high-performance rendering library designed for Node.js environments. It leverages native canvas bindings for maximum efficiency, making it suitable for high-traffic Discord bots.
 
@@ -55,7 +59,3 @@ This usually happens if the installation was interrupted. Try removing `node_mod
 
 ### "GLIBC_2.XX not found" (Linux)
 Ensure your Linux distribution is up to date. Most modern distros (Ubuntu 20.04+, Debian 11+, etc.) are fully supported.
-
----
-
-Next: [Quick Start](./quick-start.md)

@@ -1,5 +1,13 @@
 # API Reference: CardBuilder
 
+[← Back: System Architecture](../core-concepts/system-architecture.md) | [Next: Theme Engine API →](./theme-engine.md)
+
+---
+
+[← Back: System Architecture](../core-concepts/system-architecture.md) | [Next: Theme Engine API →](./theme-engine.md)
+
+---
+
 The `CardBuilder` is the primary interface for most developers. It uses a **fluent API pattern** (method chaining) to keep your code clean and readable.
 
 ## Base Class: `CardBuilder`

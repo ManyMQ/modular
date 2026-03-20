@@ -1,4 +1,8 @@
-# The Render Pipeline: Engineering Deep Dive
+# The Render Pipeline
+
+[← Back: Themes](./themes.md) | [Next: Card Builders →](./builders.md)
+
+---
 
 The Modular engine uses a 9-stage pipeline to transform your data into a pixel-perfect image. Understanding this pipeline is key for advanced developers and those wanting to write custom plugins.
 

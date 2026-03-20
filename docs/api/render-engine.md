@@ -1,5 +1,9 @@
 # API Reference: Render Engine
 
+[← Back: Theme Engine API](./theme-engine.md) | [Next: Design System Mapping →](../design-system/assets-mapping.md)
+
+---
+
 The Render Engine provides low-level control over the canvas. While most users should use the `CardBuilder`, the Render Engine is useful for building custom components or plugins.
 
 ## `CanvasRenderer`

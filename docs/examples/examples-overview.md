@@ -1,5 +1,9 @@
 # Examples Overview
 
+[← Back: Performance Guide](../guides/performance.md) | [Home: README →](../../README.md)
+
+---
+
 The best way to learn the Modular engine is by seeing it in action. Our examples are categorized by skill level and use case.
 
 ## 🟢 Basic: For Beginners

@@ -1,5 +1,9 @@
 # The Theme System
 
+[← Back: Your First Card](../getting-started/first-card.md) | [Next: Render Pipeline →](./render-pipeline.md)
+
+---
+
 The Modular engine's most powerful feature is its **Theme-Token decoupling**. This architecture separates the *structure* of a card from its *visual style*.
 
 ## 1. How it Works
@@ -63,4 +67,4 @@ card.setToken('radius.card', 0);            // Make the card perfectly square
 
 ---
 
-Next: [The Render Pipeline](./render-pipeline.md)
+[← Back: Your First Card](../getting-started/first-card.md) | [Next: Render Pipeline →](./render-pipeline.md)

@@ -1,4 +1,8 @@
-# Guide: Creating Custom Themes
+# Custom Theme Creation
+
+[← Back: Asset Mapping](../design-system/assets-mapping.md) | [Next: Performance Guide →](./performance.md)
+
+---
 
 Building a theme allow you to completely white-label the engine for your brand. This guide covers how to define, register, and use your own themes.
 

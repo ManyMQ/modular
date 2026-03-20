@@ -1,5 +1,5 @@
 {
-  "name": "@osn/modular",
+  "name": "@reformlabs/modular",
   "version": "2.1.0",
   "description": "High-performance, designer-aligned Discord card generation engine for Node.js",
   "main": "dist/index.js",
@@ -28,9 +28,9 @@
     "theme",
     "modular",
     "renderer",
-    "@osn"
+    "@reformlabs"
   ],
-  "author": "Open Source Network",
+  "author": "ReformLabs",
   "license": "MIT",
   "scripts": {
     "build": "tsc",
