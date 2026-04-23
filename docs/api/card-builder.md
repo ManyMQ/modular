@@ -1,5 +1,7 @@
 # API Reference: CardBuilder
 
+![Documentation](../assets/@modulardocumentation.png)
+
 [← Back: System Architecture](../core-concepts/system-architecture.md) | [Next: Theme Engine API →](./theme-engine.md)
 
 ---

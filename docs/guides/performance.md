@@ -1,5 +1,7 @@
 # Performance & Scaling
 
+![Documentation](../assets/@modulardocumentation.png)
+
 [← Back: Custom Themes](./creating-custom-theme.md) | [Next: Examples Overview →](../examples/examples-overview.md)
 
 ---

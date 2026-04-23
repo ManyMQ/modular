@@ -1,5 +1,7 @@
 # API Reference: Theme Engine
 
+![Documentation](../assets/@modulardocumentation.png)
+
 [← Back: CardBuilder API](./card-builder.md) | [Next: Render Engine API →](./render-engine.md)
 
 ---

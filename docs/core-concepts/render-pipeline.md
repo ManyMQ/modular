@@ -6,7 +6,7 @@
 
 The Modular engine uses a 9-stage pipeline to transform your data into a pixel-perfect image. Understanding this pipeline is key for advanced developers and those wanting to write custom plugins.
 
-![Architecture Diagram](../assets/modulardark_banner_transparent.png)
+![Architecture Diagram](../assets/@modular_banner.png)
 
 ## 1. Architectural Philosophy
 

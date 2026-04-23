@@ -1,5 +1,7 @@
 # Card Builders: The Fluent API
 
+![Documentation](../assets/@modulardocumentation.png)
+
 [← Back: Render Pipeline](./render-pipeline.md) | [Next: System Architecture →](./system-architecture.md)
 
 ---

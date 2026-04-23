@@ -1,5 +1,7 @@
 # The Theme System
 
+![Documentation](../assets/@modulardocumentation.png)
+
 [← Back: Your First Card](../getting-started/first-card.md) | [Next: Render Pipeline →](./render-pipeline.md)
 
 ---

@@ -11,23 +11,26 @@ This guide explains how the design assets in `docs/assets/` map to the library's
 
 The core visual identity of the project is defined by the following assets:
 
-### `@modulardark.png` & `@modularlight.png`
-- **Theme Mapping**: `discord` theme.
-- **Logic**: These assets showcase how the engine renders transparent vs. opaque backgrounds.
-- **Token Inspiration**: 
-    - `surface.primary`: `#1a1b26` (Dark)
-    - `surface.primary`: `#f3f4f6` (Light)
-
-### `@modulardark_banner.png`
-- **Builder Reference**: Used primarily by the `ProfileCardBuilder`.
+### `@modular_banner.png`
+- **Builder Reference**: Used primarily as the hero image for the repository and as a reference for `ProfileCardBuilder` banners.
 - **Layout Rule**: Defines the standard 3:1 aspect ratio used for top header banners across all themes.
+
+### `@modulardocumentation.png`
+- **Purpose**: Used as the header for documentation files and the main README.
+- **Logic**: Showcases the engine's capability to render complex, multi-layered text and graphics.
+
+### `@modularinstallation.png`
+- **Purpose**: Visual header for the installation and quick-start guides.
+
+### `@modularterms.png`
+- **Purpose**: Graphic representation for legal, terms of service, and licensing documentation.
 
 ## 2. Visual Theme Mappings
 
 | Asset Reference | Theme ID | Designer Interpretation |
 | :--- | :--- | :--- |
-| `modulardark_transparent.png` | `glass-modern` | Utilizes the `effect.glassmorphism` token. Uses a 20px blur radius and a 10% white alpha overlay. |
-| `modulardark.png` | `discord` | Uses the standard Discord Gray-Dark color palette. |
+| `modularlight_transparent.png` | `light` | Utilizes clean, high-contrast tokens with a transparent background for versatile embedding. |
+| `@modulardocumentation.png` | `neon-tech` | Demonstrates the `effect.glowStrength` and vibrant accent mappings. |
 
 ## 3. How Assets Translate to `ThemeConfig`
 

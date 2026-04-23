@@ -1,5 +1,7 @@
 # Installation Guide
 
+![Installation](../assets/@modularinstallation.png)
+
 [← Back to README](../../README.md) | [Next: Quick Start →](./quick-start.md)
 
 ---

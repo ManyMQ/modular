@@ -1,5 +1,7 @@
 # System Architecture
 
+![Documentation](../assets/@modulardocumentation.png)
+
 [← Back: Card Builders](./builders.md) | [Next: API Reference - CardBuilder →](../api/card-builder.md)
 
 ---

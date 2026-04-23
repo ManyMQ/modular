@@ -1,5 +1,7 @@
 # API Reference: Render Engine
 
+![Documentation](../assets/@modulardocumentation.png)
+
 [← Back: Theme Engine API](./theme-engine.md) | [Next: Design System Mapping →](../design-system/assets-mapping.md)
 
 ---
