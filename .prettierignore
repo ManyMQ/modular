@@ -1,0 +1,6 @@
+dist/
+node_modules/
+docs/
+designer/
+package-lock.json
+

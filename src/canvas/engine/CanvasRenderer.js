@@ -185,9 +185,9 @@ class CanvasRenderer extends EventEmitter {
    * @param {Array} [options.stops=[]]
    */
   async _applyGradient(ctx, {
-    type = 'linear',
-    direction = 'to-bottom',
-    stops = []
+    type: _type = 'linear',
+    direction: _direction = 'to-bottom',
+    stops: _stops = []
   }) {
     // Gradient application depends on canvas state
     // This is a placeholder for gradient overlay effects

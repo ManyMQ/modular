@@ -1,0 +1,43 @@
+{
+  "createdAt": "2026-04-25T12:22:51.937Z",
+  "node": "v24.11.1",
+  "iterations": 20,
+  "results": [
+    {
+      "name": "rank",
+      "iterations": 20,
+      "totalMs": 1355.0576,
+      "avgMs": 67.75288
+    },
+    {
+      "name": "profile",
+      "iterations": 20,
+      "totalMs": 864.8341,
+      "avgMs": 43.241705
+    },
+    {
+      "name": "music",
+      "iterations": 20,
+      "totalMs": 1231.3553,
+      "avgMs": 61.567764999999994
+    },
+    {
+      "name": "leaderboard",
+      "iterations": 20,
+      "totalMs": 1889.273,
+      "avgMs": 94.46365
+    },
+    {
+      "name": "invite",
+      "iterations": 20,
+      "totalMs": 1535.2923,
+      "avgMs": 76.764615
+    },
+    {
+      "name": "welcome",
+      "iterations": 20,
+      "totalMs": 1442.2954,
+      "avgMs": 72.11477
+    }
+  ]
+}

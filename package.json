@@ -33,9 +33,12 @@
   "author": "ReformLabs",
   "license": "MIT",
   "scripts": {
-    "build": "tsc",
+    "build": "node scripts/clean-dist.js && tsc",
     "prepublishOnly": "npm run build",
     "lint": "eslint src/",
+    "test": "npm run build && node --test tests/profile-card.test.js tests/visual-cards.test.js tests/modules/profile/validation.test.js tests/modules/rank/service.test.js",
+    "format": "prettier . --write",
+    "format:check": "prettier . --check",
     "validate": "node scripts/validate-themes.js",
     "smoke": "node scripts/smoke-test.js"
   },
@@ -49,6 +52,8 @@
     "@typescript-eslint/parser": "^8.55.0",
     "discord.js": "^14.14.0",
     "eslint": "^8.0.0",
+    "eslint-config-prettier": "^10.1.0",
+    "prettier": "^3.6.2",
     "typescript": "^5.0.0"
   },
   "repository": {

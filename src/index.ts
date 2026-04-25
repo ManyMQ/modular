@@ -4,6 +4,7 @@
  */
 
 import { Engine } from './core/Engine';
+import type { EngineOptions, CacheOptions, RendererOptions } from './core/EngineOptions';
 import RankCardBuilder from './core/RankCardBuilder';
 import ProfileCardBuilder from './core/ProfileCardBuilder';
 import MusicCardBuilder from './core/MusicCardBuilder';
@@ -11,17 +12,79 @@ import LeaderboardCardBuilder from './core/LeaderboardCardBuilder';
 import InviteCardBuilder from './core/InviteCardBuilder';
 import WelcomeCardBuilder from './core/WelcomeCardBuilder';
 
+export type ProfilePhotoId = 1 | 2 | 3 | 4;
+export type BackgroundThemeId = 1 | 2 | 3;
+export type ProfileBadgeId = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
+export type JoinDateOffset = 1 | 2 | 3;
+export type InfoDisplayFlag = 1 | 2 | 3;
+export type DiscordStatus = 'online' | 'idle' | 'dnd' | 'offline';
+
+export type BorderColor = string | [string, string] | string[];
+
+export type ProfileRankData = {
+    currentXP?: number;
+    requiredXP?: number;
+    level?: number;
+    rank?: number;
+    barColor?: string;
+};
+
+/**
+ * Integer-only controls for the redesigned profile card.
+ */
+export interface ProfileCardControlOptions {
+    profilePhotoId?: ProfilePhotoId;
+    backgroundThemeId?: BackgroundThemeId;
+    badgeIds?: ProfileBadgeId[];
+    joinDateOffset?: JoinDateOffset;
+    infoDisplayFlag?: InfoDisplayFlag;
+    // New Parametric Background
+    primary_color?: [number, number, number];
+    secondary_color?: [number, number, number];
+    pattern_intensity?: number;
+    blur_amount?: number;
+    gradient_angle?: number;
+    status?: DiscordStatus;
+    tooltipBadgeId?: ProfileBadgeId | null;
+}
+
+export interface ProfileCardAdvancedOptions {
+    customUsername?: string | null;
+    customTag?: string | null;
+    customSubtitle?: string | null;
+    customBadges?: string[];
+    customBackground?: string | null;
+    overwriteBadges?: boolean;
+    badgesFrame?: boolean;
+    removeBadges?: boolean;
+    removeBorder?: boolean;
+    usernameColor?: string;
+    tagColor?: string;
+    borderColor?: BorderColor;
+    borderAlign?: string;
+    disableProfileTheme?: boolean;
+    presenceStatus?: string | null;
+    squareAvatar?: boolean;
+    removeAvatarFrame?: boolean;
+    rankData?: ProfileRankData | null;
+    moreBackgroundBlur?: boolean;
+    backgroundBrightness?: number;
+    customDate?: Date | string | null;
+    localDateType?: string;
+}
+
+export type ProfileCardOptions = ProfileCardControlOptions & ProfileCardAdvancedOptions;
+
 // 1. Core Factory
 /**
  * Create a new engine instance.
  * @param options Engine configuration
  */
-export function createEngine(options = {}) {
+export function createEngine(options: EngineOptions = {}) {
     return new Engine(options);
 }
 
 // 2. Simplified Public API (Standalone Builders)
-// These allow 'new RankCard()' which uses a default singleton engine internally.
 
 /**
  * RankCard - Standalone builder for Discord rank cards.
@@ -88,6 +151,7 @@ export function createTheme(config: any) {
 
 // 4. Stable Core Exports
 export { Engine };
+export type { EngineOptions, CacheOptions, RendererOptions };
 import RenderPipeline = require('./core/RenderPipeline');
 import ThemeManagerMod = require('./canvas/themes/ThemeManager');
 const ThemeManager = ThemeManagerMod.ThemeManager;

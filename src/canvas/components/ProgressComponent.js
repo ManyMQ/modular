@@ -31,14 +31,11 @@ class ProgressComponent extends BaseComponent {
     const { x, y, width, height } = bounds;
     const value = this.getProp('value', this.getProp('progress', 0));
     const max = this.getProp('max', 100);
-    const showLabel = this.getProp('showLabel', false);
-    const labelText = this.getProp('label', '');
     const trackColor = this.getProp('trackColor', styles?.background?.secondary || '#1f1f2e');
     const fillColor = this.getProp('fillColor', styles?.accent?.primary || '#7c3aed');
     const cornerRadius = this.getProp('cornerRadius', height / 2);
 
     const dpi = tokens.dpi || tokens['dpi'] || 2;
-    const scaledHeight = this.scale(height, dpi);
     const scaledRadius = this.scale(cornerRadius, dpi);
 
     // Calculate progress

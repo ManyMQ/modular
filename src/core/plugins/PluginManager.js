@@ -156,7 +156,7 @@ class BasePlugin {
    * Install hook - called when plugin is registered
    * @param {Engine} engine
    */
-  install(engine) {
+  install(_engine) {
     // Override in subclass
   }
 
@@ -164,7 +164,7 @@ class BasePlugin {
    * Uninstall hook - called when plugin is unregistered
    * @param {Engine} engine
    */
-  uninstall(engine) {
+  uninstall(_engine) {
     // Override in subclass
   }
 

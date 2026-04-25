@@ -1,7 +1,7 @@
 'use strict';
 
 const { BaseComponent } = require('../components/BaseComponent');
-const { createLinearGradient, setShadow, clearShadow } = require('../utils/canvas');
+const { createLinearGradient } = require('../utils/canvas');
 const { setAlpha } = require('../utils/color');
 const {
     renderCardBackground, renderThemeDecorations,

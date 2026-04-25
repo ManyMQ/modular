@@ -4,46 +4,49 @@
 
 ---
 
-The best way to learn the Modular engine is by seeing it in action. Our examples are categorized by skill level and use case.
+The best way to learn the `@reformlabs/modular` engine is by seeing it in action. Below is a conceptual overview of the different ways you can use the library. *(Note: The actual executable examples are located in the `examples/` directory of the repository, if available).*
 
 ## 🟢 Basic: For Beginners
 
-Get started with the fundamental features.
+Get started with the fundamental features using the standalone builder classes.
 
 | Example | Description |
 | :--- | :--- |
-| **[rank-basic.js](../../examples/basic/rank-basic.js)** | The "Hello World" of card rendering. Standard leveling layout. |
-| **[profile-basic.js](../../examples/basic/profile-basic.js)** | Shows simple user metadata display. |
+| **`RankCard` Basic** | The "Hello World" of card rendering. Standard leveling layout using `.setStats()`. |
+| **`ProfileCard` Basic** | Shows simple user metadata display using `.setCustomUsername()` and `.setBadgeIds()`. |
+| **`WelcomeCard` Basic** | Simple server join event card using `.setGuild()`. |
 
 ## 🟡 Theme Showcase
 
-Explore the visual diversity of the engine.
+Explore the visual diversity of the engine's 21 built-in themes. Switch themes simply by changing a single string.
 
-| Example | Featured Theme | Visual Strength |
-| :--- | :--- | :--- |
-| **[neon-example.js](../../examples/themes/neon-example.js)** | `neon-tech` | Vibrant glow effects and circular XP rings. |
-| **[glass-example.js](../../examples/themes/glass-example.js)** | `glass-modern` | Backdrop blurring and frosted glass effects. |
-| **[theme-comparison.js](../../examples/themes/theme-comparison.js)** | Multi-theme | Side-by-side comparison of 6 built-in themes. |
+| Featured Theme | Visual Strength |
+| :--- | :--- |
+| `neon-tech` | Vibrant cyan/magenta glow effects. |
+| `glass-modern` | Backdrop blurring and frosted glass effects with clean typography. |
+| `esport` | Aggressive, high-contrast monochrome and red design for gamers. *(New in v2.1)* |
+| `pink-gradient` | Soft, warm gradients. |
 
 ## 🟠 Advanced: Customization
 
 Learn how to break out of the defaults.
 
-| Example | Concept | Key API |
-| :--- | :--- | :--- |
-| **[custom-theme.js](../../examples/advanced/custom-theme.js)** | Runtime themes | `engine.registerTheme()` |
-| **[custom-layout.js](../../examples/advanced/custom-layout.js)** | Manual Layout | `builder.setLayout()` |
-| **[dynamic-data.js](../../examples/advanced/dynamic-data.js)** | Custom Tokens | `builder.setToken()` |
+| Concept | Key API |
+| :--- | :--- |
+| **Runtime Themes** | `engine.themeManager.register('my-brand', myThemeObj)` |
+| **Parametric Backgrounds** | `.setPrimaryColor()`, `.setPatternIntensity()`, `.setGradientAngle()` on `ProfileCard` |
+| **Dynamic Tokens** | `card.setToken('colors.accent.primary', '#ff0000')` |
 
-## 🚀 Production: Bot Integration
+## 🚀 Production: Bot Integration (Discord.js)
 
-Real-world code for production Discord bots.
+Real-world code patterns for production Discord bots.
 
-| Example | Library | Key Feature |
-| :--- | :--- | :--- |
-| **[rank-command-example.js](../../examples/discord-bot/rank-command-example.js)** | discord.js | Deferred replies and Attachment usage. |
-| **[profile-command-example.js](../../examples/discord-bot/profile-command-example.js)** | discord.js | High-level `.reply()` helper method. |
+| Use Case | Key Feature |
+| :--- | :--- |
+| **Slash Commands** | High-level `await card.reply(interaction)` handles deferred states automatically. |
+| **Event Listeners** | `await card.send(channel)` for sending a `WelcomeCard` when `guildMemberAdd` fires. |
+| **Performance** | Engine reuse: Initialize `createEngine()` once globally, create new builders per request. |
 
 ---
 
-Want to see something else? [Open an issue on GitHub](https://github.com/manymq/modular/issues) to request new examples.
+Want to see a specific real-world example? [Open an issue on GitHub](https://github.com/reformlabs/modular/issues) to request new examples.

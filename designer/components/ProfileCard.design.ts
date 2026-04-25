@@ -3,8 +3,8 @@
  */
 export const ProfileCardDesign = {
     canvas: {
-        width: 800,
-        height: 400
+        width: 885,
+        height: 303
     },
     layout: {
         Banner: { height: 120 },

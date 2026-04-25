@@ -6,7 +6,7 @@
  * No class needed here; plain functions are easier to tree-shake and test.
  */
 
-const { roundRect, createLinearGradient, setShadow, clearShadow } = require('../../utils/canvas');
+const { createLinearGradient, setShadow, clearShadow } = require('../../utils/canvas');
 const { setAlpha } = require('../../utils/color');
 
 /**
@@ -193,7 +193,7 @@ function renderTechDeco(ctx, width, height, tokens, scale) {
     ctx.restore();
 }
 
-function drawGrid(ctx, width, height, color, opacity, scale) {
+function drawGrid(ctx, width, height, color, opacity, _scale) {
     ctx.save();
     ctx.strokeStyle = setAlpha(color, opacity);
     ctx.lineWidth = 1;

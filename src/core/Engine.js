@@ -32,6 +32,7 @@ const { PluginManager } = require('./plugins/PluginManager');
 const { ComponentRegistry } = require('./ComponentRegistry');
 const { LRUCache } = require('./cache/LRUCache');
 const CardBuilder = require('./CardBuilder');
+const { getCardBuilderClass } = require('./internal/router');
 
 // Card renderers — each card type has its own focused renderer
 const { RankCardRenderer } = require('../canvas/renderers/RankCardRenderer');
@@ -143,11 +144,21 @@ class Engine extends EventEmitter {
   // ==================== Builder Factory Methods ====================
 
   /**
-   * Create a new generic card builder instance
+   * Create a new card builder instance
+   * @param {string|null} [cardType=null] - Optional card type id
    * @returns {CardBuilder}
    */
-  createCard() {
-    return new CardBuilder(this);
+  createCard(cardType = null) {
+    if (!cardType) {
+      return new CardBuilder(this);
+    }
+
+    const BuilderClass = getCardBuilderClass(String(cardType));
+    if (!BuilderClass) {
+      throw new Error(`Unknown card type: ${cardType}`);
+    }
+
+    return new BuilderClass(this);
   }
 
   /**
@@ -155,8 +166,7 @@ class Engine extends EventEmitter {
    * @returns {RankCardBuilder}
    */
   createRankCard() {
-    const RankCardBuilder = require('./RankCardBuilder');
-    return new RankCardBuilder(this);
+    return this.createCard('rank');
   }
 
   /**
@@ -164,8 +174,7 @@ class Engine extends EventEmitter {
    * @returns {MusicCardBuilder}
    */
   createMusicCard() {
-    const MusicCardBuilder = require('./MusicCardBuilder');
-    return new MusicCardBuilder(this);
+    return this.createCard('music');
   }
 
   /**
@@ -173,8 +182,7 @@ class Engine extends EventEmitter {
    * @returns {LeaderboardCardBuilder}
    */
   createLeaderboardCard() {
-    const LeaderboardCardBuilder = require('./LeaderboardCardBuilder');
-    return new LeaderboardCardBuilder(this);
+    return this.createCard('leaderboard');
   }
 
   /**
@@ -182,8 +190,7 @@ class Engine extends EventEmitter {
    * @returns {InviteCardBuilder}
    */
   createInviteCard() {
-    const InviteCardBuilder = require('./InviteCardBuilder');
-    return new InviteCardBuilder(this);
+    return this.createCard('invite');
   }
 
   /**
@@ -191,8 +198,7 @@ class Engine extends EventEmitter {
    * @returns {ProfileCardBuilder}
    */
   createProfileCard() {
-    const ProfileCardBuilder = require('./ProfileCardBuilder');
-    return new ProfileCardBuilder(this);
+    return this.createCard('profile');
   }
 
   /**
@@ -200,8 +206,7 @@ class Engine extends EventEmitter {
    * @returns {WelcomeCardBuilder}
    */
   createWelcomeCard() {
-    const WelcomeCardBuilder = require('./WelcomeCardBuilder');
-    return new WelcomeCardBuilder(this);
+    return this.createCard('welcome');
   }
 
   // ==================== Plugin System ====================
@@ -432,4 +437,3 @@ function createEngine(options = {}) {
 }
 
 module.exports = { Engine, createEngine };
-

@@ -4,66 +4,59 @@
 
 ---
 
-This guide explains how the design assets in `docs/assets/` map to the library's internal systems
-—from theme tokens to the final rendering pipeline.
+This guide explains how visual design assets (like Figma mockups) map to the library's internal systems — from theme tokens to the final rendering pipeline in `@reformlabs/modular`.
 
 ## 1. Primary Branding Assets
 
-The core visual identity of the project is defined by the following assets:
+The core visual identity of the project is defined by the following logic:
 
-### `@modular_banner.png`
-- **Builder Reference**: Used primarily as the hero image for the repository and as a reference for `ProfileCardBuilder` banners.
-- **Layout Rule**: Defines the standard 3:1 aspect ratio used for top header banners across all themes.
-
-### `@modulardocumentation.png`
-- **Purpose**: Used as the header for documentation files and the main README.
-- **Logic**: Showcases the engine's capability to render complex, multi-layered text and graphics.
-
-### `@modularinstallation.png`
-- **Purpose**: Visual header for the installation and quick-start guides.
-
-### `@modularterms.png`
-- **Purpose**: Graphic representation for legal, terms of service, and licensing documentation.
+### Card Proportions
+- **Default Resolution**: 1600×800 pixels (800×400 logical at DPI 2).
+- **Aspect Ratio**: 2:1 is the standard for most Discord embeds, maximizing vertical space without getting cropped on mobile.
 
 ## 2. Visual Theme Mappings
 
-| Asset Reference | Theme ID | Designer Interpretation |
-| :--- | :--- | :--- |
-| `modularlight_transparent.png` | `light` | Utilizes clean, high-contrast tokens with a transparent background for versatile embedding. |
-| `@modulardocumentation.png` | `neon-tech` | Demonstrates the `effect.glowStrength` and vibrant accent mappings. |
+Themes in the engine are translated directly from design concepts:
+
+| Theme ID | Designer Interpretation |
+| :--- | :--- |
+| `light` | Utilizes clean, high-contrast tokens with a pure white surface (`#ffffff`) for versatile embedding. |
+| `neon-tech` | Demonstrates heavy `effects.glowStrength` mapping, using stark black backgrounds with `#00f0ff` (cyan) accents. |
+| `glass-modern` | Utilizes `effects.glassBlur` to create depth, avoiding solid hex colors in favor of `rgba()` surfaces over dynamic backgrounds. |
 
 ## 3. How Assets Translate to `ThemeConfig`
 
-When we create a new theme based on a design asset, we follow these mapping rules:
+When creating a new theme based on a design mockup, follow these mapping rules:
 
 ### Step 1: Color Extraction
-We sample colors from the PNG design to fill the `colors` block:
+Sample colors from the mockup to fill the `colors` block:
 ```javascript
 colors: {
   accent: {
-    primary: '#7c3aed', // sampled from button/progress bar
-    glow: 'rgba(124, 58, 237, 0.4)' // calculated alpha from design shadows
+    primary: '#7c3aed', // sampled from the main button/progress bar
+    glow: 'rgba(124, 58, 237, 0.4)' // calculated 40% alpha from design shadows
   }
 }
 ```
 
 ### Step 2: Radius Resolution
-We measure the corner roundness in pixel values. These values are mapped to:
-- `radius.card`
-- `radius.avatar`
-- `radius.badge`
+Measure the corner roundness in pixel values. These map directly to:
+- `radius.card` (Outer border radius)
+- `radius.inner` (Inner panels)
+- `radius.avatar` (Percentage for avatar clipping — 50 = circle)
 
 ### Step 3: Effect Detection
-We analyze the visual effects to set engine-specific flags:
-- If we see frosted glass → `effect.glassmorphism: true`
-- If we see neon glows → `effect.glowStrength: 40`
-- If we see matrix lines → `effect.scanlines: true`
+Analyze the visual effects to set engine-specific flags:
+- If you see frosted glass over a background → `effects.glassBlur: 10`
+- If you see drop shadows that match the accent color → `effects.glowStrength: 40`
+- If you see matrix-style horizontal lines → `effects.scanlines: true`
+- If you see neon lines around the card edges → `effects.neonBorders: true`
+- If the card border has a specific stroke width → `effects.borderWidth: 2`
 
 ## 4. Design-to-Code Consistency
 
-The `designer/` directory in this repository contains mapping utilities that ensure every design in Figma/PNG matches the rendered output in Node.js. 
+The engine's `StyleEngine` ensures that every design choice in Figma matches the rendered output in Node.js. 
 
-- **Token Mapping**: See `designer/mappings/designer-token-to-theme.mapper.ts`.
-- **Layout Definition**: See `designer/components/RankCard.design.ts`.
+By following this mapping process, you guarantee that any change your designer makes to the branding palette can be implemented in the library using `engine.themeManager.register()` with zero visual drift.
 
-By following this mapping, we guarantee that any change your designer makes to the branding assets can be implemented in the library with zero visual drift.
+See [Custom Theme Creation](../guides/creating-custom-theme.md) for the exact code required to implement a mapped design.

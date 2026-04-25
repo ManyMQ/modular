@@ -21,7 +21,7 @@ class LayoutParser {
    * Normalize a layout node
    * @private
    */
-  _normalizeNode(node, parent = null) {
+  _normalizeNode(node, _parent = null) {
     if (!node) return null;
 
     const normalized = {
@@ -92,7 +92,7 @@ class LayoutParser {
     try {
       this._validateNode(layout);
       return true;
-    } catch (err) {
+    } catch {
       return false;
     }
   }

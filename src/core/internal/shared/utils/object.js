@@ -1,0 +1,8 @@
+'use strict';
+
+function isPlainObject(value) {
+    return !!value && typeof value === 'object' && value.constructor === Object;
+}
+
+module.exports = { isPlainObject };
+

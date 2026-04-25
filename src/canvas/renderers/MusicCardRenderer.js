@@ -1,10 +1,9 @@
 'use strict';
 
 const { BaseComponent } = require('../components/BaseComponent');
-const { setAlpha } = require('../utils/color');
 const {
     renderCardBackground, renderThemeDecorations,
-    renderAvatar, drawIcon, getFontWeight
+    drawIcon, getFontWeight
 } = require('./shared/effects');
 
 class MusicCardRenderer extends BaseComponent {

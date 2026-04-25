@@ -108,7 +108,7 @@ class BaseComponent {
    * @param {Object} tokens - Resolved tokens
    * @returns {Promise<*>}
    */
-  async _render(ctx, bounds, styles, tokens) {
+  async _render(_ctx, _bounds, _styles, _tokens) {
     throw new Error('_render must be implemented by subclass');
   }
 
@@ -213,4 +213,3 @@ class BaseComponent {
 }
 
 module.exports = { BaseComponent };
-

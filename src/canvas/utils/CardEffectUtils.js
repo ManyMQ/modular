@@ -11,11 +11,9 @@ const { setAlpha } = require('./color');
  */
 function applyGlassmorphism(ctx, x, y, width, height, options = {}) {
   const {
-    blur = 20,
     opacity = 0.6,
     highlight = true,
-    border = true,
-    noise = false
+    border = true
   } = options;
 
   ctx.save();
